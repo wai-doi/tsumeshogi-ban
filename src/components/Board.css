@@ -3,9 +3,30 @@
   justify-content: center;
 }
 
-.board-and-stand {
+.board-container {
   display: flex;
   justify-content: center;
-  align-items: end;
   margin-bottom: 10px;
+}
+
+.button-stand {
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  margin-left: 20px;
+}
+
+.buttons {
+  display: flex;
+  flex-flow: column;
+}
+
+.button {
+  margin-bottom: 30px;
+  height: 50px;
+  font-size: large;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 10px;
 }

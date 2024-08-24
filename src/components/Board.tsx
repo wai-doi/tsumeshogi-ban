@@ -5,6 +5,7 @@ import PieceBox from './PieceBox.tsx'
 import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { FaSave, FaTrash, FaHistory, FaEraser } from 'react-icons/fa';
 
 type PieceKind =
   | 'pawn'
@@ -67,7 +68,10 @@ export default function Board() {
     }).flat()
   )}
 
-  const [pieces, setPieces] = useState<PieceType[]>(generatePieces());
+  const savedPieces: PieceType[] | null = JSON.parse(localStorage.getItem('pieces') || 'null')
+
+  const [pieces, setPieces] = useState<PieceType[]>(savedPieces || generatePieces());
+  const [saved, setSaved] = useState<boolean>(!!savedPieces)
 
   const handleRightClick: handleRightClickType = function (event, pieceId) {
     event.preventDefault()
@@ -125,14 +129,52 @@ export default function Board() {
     )
   }
 
+  function handleSaveBoard() {
+    if (confirm('配置を保存しますか？')) {
+      localStorage.setItem('pieces', JSON.stringify(pieces))
+      setSaved(true)
+    }
+  }
+
+  function handleDeleteSavedBoard() {
+    if (!saved) return
+
+    if (confirm('保存した配置を消しますか？')) {
+      localStorage.removeItem('pieces')
+      setSaved(false)
+    }
+  }
+
+  function handleLoadBoard() {
+    if (!saved) return
+
+    if (confirm('保存した配置にしますか？')) {
+      setPieces(savedPieces!)
+    }
+  }
+
+  function handleClearBoard() {
+    if (confirm('配置をクリアしますか？')) {
+      setPieces(generatePieces())
+    }
+  }
+
   return(
     <>
       <DndContext onDragEnd={handleDragEnd}>
-        <div className='board-and-stand'>
+        <div className='board-container'>
           <div className='board'>
             {renderBoard()}
           </div>
-          <PieceStand pieces={piecesInStand}/>
+          <div className='button-stand'>
+            <div className='buttons'>
+              <button className='button' onClick={handleSaveBoard}><FaSave /> 配置を保存する</button>
+              <button className='button' disabled={!saved} onClick={handleDeleteSavedBoard}><FaTrash /> 保存した配置を消す</button>
+              <button className='button' disabled={!saved} onClick={handleLoadBoard}><FaHistory /> 保存した配置にする</button>
+              <button className='button' onClick={handleClearBoard}><FaEraser /> 配置をクリア</button>
+            </div>
+            <PieceStand pieces={piecesInStand}/>
+          </div>
         </div>
         <PieceBox pieces={piecesInBox}/>
       </DndContext>
