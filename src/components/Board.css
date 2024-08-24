@@ -1,4 +1,11 @@
 .row {
   display: flex;
-  justify-content: center
+  justify-content: center;
+}
+
+.board-and-stand {
+  display: flex;
+  justify-content: center;
+  align-items: end;
+  margin-bottom: 10px;
 }
