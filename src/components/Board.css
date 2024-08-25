@@ -3,6 +3,10 @@
   justify-content: center;
 }
 
+.board {
+  border: 5px solid #d38457;
+}
+
 .board-container {
   display: flex;
   justify-content: center;
