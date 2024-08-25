@@ -1,5 +1,21 @@
 .piece-box {
   background-color: bisque;
-  width: 100%;
-  height: 150px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-evenly;
+  border-radius: 10px;
+}
+
+.piece-group {
+  display: grid;
+}
+
+.overlay {
+  grid-area: 1 / 1;
+}
+
+.piece-number {
+  color: black;
+  font-size: 20px;
+  font-weight: bold;
 }

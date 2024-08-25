@@ -7,7 +7,7 @@ import Piece from './pieces/Piece.tsx'
 import { DndContext, DragEndEvent } from '@dnd-kit/core';
 import { FaSave, FaTrash, FaHistory, FaEraser } from 'react-icons/fa';
 
-type PieceKind =
+export type PieceKind =
   | 'pawn'
   | 'lance'
   | 'knight'
