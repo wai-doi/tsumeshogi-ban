@@ -4,3 +4,22 @@
   padding: 2rem;
   text-align: center;
 }
+
+.title-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+.navigation {
+  position: absolute;
+  right: 0;
+  font-size: 40px;
+  color: white;
+}
+
+.navigation > a {
+  color: white;
+  margin: 0 10px;
+}
