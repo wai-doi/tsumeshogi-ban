@@ -8,9 +8,9 @@ import RookImage from './RookImage'
 import KingImage from './KingImage'
 import './Piece.css'
 import {useDraggable} from '@dnd-kit/core';
-import {PieceType, handleRightClickType} from '../Board'
+import {PieceType, handleRightOrDoubleClickType} from '../Board'
 
-export default function Piece({piece, onRightClick}: {piece: PieceType, onRightClick?: handleRightClickType}) {
+export default function Piece({piece, onRightOrDoubleClick}: {piece: PieceType, onRightOrDoubleClick?: handleRightOrDoubleClickType}) {
   const {attributes, listeners, setNodeRef, transform} = useDraggable({
     id: piece.id,
     data: {piece: piece}
@@ -66,7 +66,16 @@ export default function Piece({piece, onRightClick}: {piece: PieceType, onRightC
   return(
     <>
       <span>
-        <img ref={setNodeRef} style={style} {...listeners} {...attributes} src={imagePath()} className='piece' onContextMenu={(e) => onRightClick ? onRightClick(e, piece.id) : undefined}/>
+        <img
+          ref={setNodeRef}
+          style={style}
+          {...listeners}
+          {...attributes}
+          src={imagePath()}
+          className='piece'
+          onContextMenu={(e) => onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)}
+          onDoubleClick={(e) => onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)}
+        />
       </span>
     </>
   )

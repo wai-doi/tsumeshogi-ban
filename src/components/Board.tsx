@@ -4,7 +4,7 @@ import PieceStand from './PieceStand.tsx'
 import PieceBox from './PieceBox.tsx'
 import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
-import { DndContext, DragEndEvent } from '@dnd-kit/core';
+import { DndContext, DragEndEvent, PointerSensor, useSensor, useSensors } from '@dnd-kit/core';
 import { FaSave, FaTrash, FaHistory, FaEraser } from 'react-icons/fa';
 
 export type PieceKind =
@@ -33,7 +33,7 @@ export type PieceType = {
   promotable: boolean
 }
 
-export type handleRightClickType = (event: React.MouseEvent, pieceID: string) => void
+export type handleRightOrDoubleClickType = (event: React.MouseEvent, pieceID: string) => void
 
 export default function Board() {
   function generatePieces(): PieceType[] {
@@ -73,7 +73,14 @@ export default function Board() {
   const [pieces, setPieces] = useState<PieceType[]>(savedPieces || generatePieces());
   const [saved, setSaved] = useState<boolean>(!!savedPieces)
 
-  const handleRightClick: handleRightClickType = function (event, pieceId) {
+  const pointSensor = useSensor(PointerSensor, {
+    activationConstraint: {
+      distance: 5
+    }
+  })
+  const sensors = useSensors(pointSensor)
+
+  const handleRightOrDoubleClick: handleRightOrDoubleClickType = function (event, pieceId) {
     event.preventDefault()
     const nextPieces = pieces.slice();
     const piece = nextPieces.find(p => p.id === pieceId);
@@ -121,7 +128,7 @@ export default function Board() {
           const piece = piecesOnBoard.find((piece) => piece.row === row && piece.col === col)
           return(
             <Square row={row} col={col}>
-              {piece ? <Piece piece={piece} onRightClick={(e: React.MouseEvent) => handleRightClick(e, piece.id)}/> : null}
+              {piece ? <Piece piece={piece} onRightOrDoubleClick={(e: React.MouseEvent) => handleRightOrDoubleClick(e, piece.id)}/> : null}
             </Square>
           )
         })}
@@ -161,7 +168,7 @@ export default function Board() {
 
   return(
     <>
-      <DndContext onDragEnd={handleDragEnd}>
+      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
         <div className='board-container'>
           <div className='board'>
             {renderBoard()}
