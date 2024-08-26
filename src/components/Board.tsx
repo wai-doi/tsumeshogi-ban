@@ -38,7 +38,7 @@ export type handleRightClickType = (event: React.MouseEvent, pieceID: string) =>
 export default function Board() {
   function generatePieces(): PieceType[] {
     const pieceNumber: {kind: PieceKind, number: number}[] = [
-      {kind: 'pawn', number: 10},
+      {kind: 'pawn', number: 18},
       {kind: 'lance', number: 4},
       {kind: 'knight', number: 4},
       {kind: 'silver', number: 4},
