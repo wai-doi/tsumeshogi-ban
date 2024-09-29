@@ -5,7 +5,7 @@ const Images = {
   normal: Image,
   promoted: undefined,
   opposite: OppositeImage,
-  oppositePromoted: undefined
+  oppositePromoted: undefined,
 }
 
 export default Images

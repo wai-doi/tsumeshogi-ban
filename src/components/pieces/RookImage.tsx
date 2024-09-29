@@ -7,7 +7,7 @@ const Images = {
   normal: Image,
   promoted: PromotedImage,
   opposite: OppositeImage,
-  oppositePromoted: OppositePromotedImage
+  oppositePromoted: OppositePromotedImage,
 }
 
 export default Images

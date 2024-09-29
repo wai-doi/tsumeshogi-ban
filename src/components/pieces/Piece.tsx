@@ -7,21 +7,29 @@ import BishopImage from './BishopImage'
 import RookImage from './RookImage'
 import KingImage from './KingImage'
 import './Piece.css'
-import {useDraggable} from '@dnd-kit/core';
-import {PieceType, handleRightOrDoubleClickType} from '../Board'
+import { useDraggable } from '@dnd-kit/core'
+import { PieceType, handleRightOrDoubleClickType } from '../Board'
 
-export default function Piece({piece, onRightOrDoubleClick}: {piece: PieceType, onRightOrDoubleClick?: handleRightOrDoubleClickType}) {
-  const {attributes, listeners, setNodeRef, transform} = useDraggable({
+export default function Piece({
+  piece,
+  onRightOrDoubleClick,
+}: {
+  piece: PieceType
+  onRightOrDoubleClick?: handleRightOrDoubleClickType
+}) {
+  const { attributes, listeners, setNodeRef, transform } = useDraggable({
     id: piece.id,
-    data: {piece: piece}
-  });
+    data: { piece: piece },
+  })
 
-  const style = transform ? {
-    transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-  } : undefined;
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined
 
   const getImageSet = () => {
-    switch(piece.kind) {
+    switch (piece.kind) {
       case 'pawn':
         return PawnImage
         break
@@ -50,20 +58,20 @@ export default function Piece({piece, onRightOrDoubleClick}: {piece: PieceType, 
   }
 
   const imagePath = () => {
-    const imageSet = getImageSet()!;
+    const imageSet = getImageSet()!
 
     if (!piece.promoted && !piece.opposite) {
-      return imageSet.normal;
+      return imageSet.normal
     } else if (piece.promoted && !piece.opposite) {
-      return imageSet.promoted;
+      return imageSet.promoted
     } else if (!piece.promoted && piece.opposite) {
-      return imageSet.opposite;
+      return imageSet.opposite
     } else if (piece.promoted && piece.opposite) {
-      return imageSet.oppositePromoted;
+      return imageSet.oppositePromoted
     }
   }
 
-  return(
+  return (
     <>
       <span>
         <img
@@ -72,9 +80,13 @@ export default function Piece({piece, onRightOrDoubleClick}: {piece: PieceType, 
           {...listeners}
           {...attributes}
           src={imagePath()}
-          className='piece'
-          onContextMenu={(e) => onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)}
-          onDoubleClick={(e) => onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)}
+          className="piece"
+          onContextMenu={(e) =>
+            onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)
+          }
+          onDoubleClick={(e) =>
+            onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)
+          }
         />
       </span>
     </>
