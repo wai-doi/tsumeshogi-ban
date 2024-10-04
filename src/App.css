@@ -1,15 +1,15 @@
 #root {
   max-width: 60%;
-  margin: 0 auto;
   padding: 2rem;
+  margin: 0 auto;
   text-align: center;
 }
 
 .title-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .navigation {
@@ -20,6 +20,6 @@
 }
 
 .navigation > a {
-  color: white;
   margin: 0 10px;
+  color: white;
 }
