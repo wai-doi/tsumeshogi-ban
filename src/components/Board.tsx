@@ -11,7 +11,7 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { FaSave, FaTrash, FaHistory, FaEraser } from 'react-icons/fa'
+import { FaSave, FaTrash, FaHistory, FaEraser, FaEdit } from 'react-icons/fa'
 
 export type PieceKind =
   | 'pawn'
@@ -35,6 +35,8 @@ export type PieceType = {
   opposite: boolean
   promotable: boolean
 }
+
+type Mode = 'edit' | 'solve'
 
 export type handleRightOrDoubleClickType = (
   event: React.MouseEvent,
@@ -84,6 +86,7 @@ export default function Board() {
     savedPieces || generatePieces(),
   )
   const [saved, setSaved] = useState<boolean>(!!savedPieces)
+  const [mode, setMode] = useState<Mode>('edit')
 
   const pointSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -162,10 +165,24 @@ export default function Board() {
     )
   }
 
+  function renderMode() {
+    return (
+      <div className="mode">
+        <div className={mode == 'edit' ? 'active-mode' : 'inactive-mode'}>
+          編集モード
+        </div>
+        <div className={mode == 'solve' ? 'active-mode' : 'inactive-mode'}>
+          解答モード
+        </div>
+      </div>
+    )
+  }
+
   function handleSaveBoard() {
-    if (confirm('配置を保存しますか？')) {
+    if (confirm('盤面の編集を終了しますか？')) {
       localStorage.setItem('pieces', JSON.stringify(pieces))
       setSaved(true)
+      setMode('solve')
     }
   }
 
@@ -179,11 +196,7 @@ export default function Board() {
   }
 
   function handleLoadBoard() {
-    if (!saved) return
-
-    if (confirm('保存した配置にしますか？')) {
-      setPieces(savedPieces!)
-    }
+    setPieces(savedPieces!)
   }
 
   function handleClearBoard() {
@@ -192,38 +205,60 @@ export default function Board() {
     }
   }
 
+  function handleSwitchToEdit() {
+    setMode('edit')
+  }
+
   return (
     <>
+      <div>{renderMode()}</div>
       <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
         <div className="board-container">
           <div className="board">{renderBoard()}</div>
           <div className="button-stand">
             <div className="buttons">
-              <button className="button" onClick={handleSaveBoard}>
-                <FaSave /> 配置を保存する
-              </button>
-              <button
-                className="button"
-                disabled={!saved}
-                onClick={handleDeleteSavedBoard}
-              >
-                <FaTrash /> 保存した配置を消す
-              </button>
-              <button
-                className="button"
-                disabled={!saved}
-                onClick={handleLoadBoard}
-              >
-                <FaHistory /> 保存した配置にする
-              </button>
-              <button className="button" onClick={handleClearBoard}>
-                <FaEraser /> 配置をクリア
-              </button>
+              {mode == 'edit' && (
+                <>
+                  <button
+                    className="button switch-mode-button"
+                    onClick={handleSaveBoard}
+                  >
+                    <FaSave /> 保存して編集を終了
+                  </button>
+                  <button
+                    className="button"
+                    disabled={!saved}
+                    onClick={handleDeleteSavedBoard}
+                  >
+                    <FaTrash /> 保存した配置を消す
+                  </button>
+                  <button className="button" onClick={handleClearBoard}>
+                    <FaEraser /> 配置をクリア
+                  </button>
+                </>
+              )}
+              {mode == 'solve' && (
+                <>
+                  <button
+                    className="button switch-mode-button"
+                    onClick={handleSwitchToEdit}
+                  >
+                    <FaEdit /> 盤面を編集する
+                  </button>
+                  <button
+                    className="button"
+                    disabled={!saved}
+                    onClick={handleLoadBoard}
+                  >
+                    <FaHistory /> 初期盤面に戻す
+                  </button>
+                </>
+              )}
             </div>
             <PieceStand pieces={piecesInStand} />
           </div>
         </div>
-        <PieceBox pieces={piecesInBox} />
+        {mode == 'edit' && <PieceBox pieces={piecesInBox} />}
       </DndContext>
     </>
   )

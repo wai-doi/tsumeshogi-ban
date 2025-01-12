@@ -1,3 +1,22 @@
+.mode {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+}
+
+.active-mode {
+  padding: 3px;
+  color: yellow;
+  border: 1px solid yellow;
+}
+
+.inactive-mode {
+  padding: 3px;
+  color: gray;
+}
+
 .row {
   display: flex;
   justify-content: center;
@@ -33,4 +52,9 @@
   text-align: left;
   cursor: pointer;
   border-radius: 10px;
+}
+
+.switch-mode-button {
+  color: white;
+  background-color: rgb(31 75 140);
 }
