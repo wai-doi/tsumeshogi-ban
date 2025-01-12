@@ -1,7 +1,7 @@
 .piece-box {
   display: flex;
-  justify-content: space-evenly;
-  padding: 20px;
+  justify-content: space-around;
+  padding: 5px 0;
   background-color: bisque;
   border-radius: 10px;
 }
