@@ -258,7 +258,7 @@ export default function Board() {
             <PieceStand pieces={piecesInStand} />
           </div>
         </div>
-        {mode == 'edit' && <PieceBox pieces={piecesInBox} />}
+        <PieceBox pieces={piecesInBox} />
       </DndContext>
     </>
   )
