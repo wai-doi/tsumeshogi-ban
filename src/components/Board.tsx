@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { isEqual } from 'lodash'
 import './Board.css'
 import PieceStand from './PieceStand.tsx'
 import PieceBox from './PieceBox.tsx'
@@ -11,7 +12,16 @@ import {
   useSensor,
   useSensors,
 } from '@dnd-kit/core'
-import { FaSave, FaTrash, FaHistory, FaEraser, FaEdit } from 'react-icons/fa'
+import {
+  FaSave,
+  FaTrash,
+  FaEraser,
+  FaEdit,
+  FaAngleDoubleLeft,
+  FaAngleLeft,
+  FaAngleRight,
+  FaAngleDoubleRight,
+} from 'react-icons/fa'
 
 export type PieceKind =
   | 'pawn'
@@ -87,6 +97,10 @@ export default function Board() {
   )
   const [saved, setSaved] = useState<boolean>(!!savedPieces)
   const [mode, setMode] = useState<Mode>('edit')
+  const [currentMove, setCurrentMove] = useState<number>(0)
+  const [history, setHistory] = useState<PieceType[][]>([
+    structuredClone(pieces),
+  ])
 
   const pointSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -100,7 +114,7 @@ export default function Board() {
     pieceId,
   ) {
     event.preventDefault()
-    const nextPieces = pieces.slice()
+    const nextPieces = structuredClone(pieces)
     const piece = nextPieces.find((p) => p.id === pieceId)
     if (!piece) return
 
@@ -131,6 +145,12 @@ export default function Board() {
     }
 
     setPieces(nextPieces)
+
+    if (mode == 'solve') {
+      // 末尾の盤面を上書きする
+      const nextHistory = [...history.slice(0, currentMove), nextPieces]
+      setHistory(nextHistory)
+    }
   }
 
   const piecesOnBoard = pieces.filter((piece) => piece.place === 'board')
@@ -183,6 +203,7 @@ export default function Board() {
       localStorage.setItem('pieces', JSON.stringify(pieces))
       setSaved(true)
       setMode('solve')
+      setHistory([structuredClone(pieces)])
     }
   }
 
@@ -195,10 +216,6 @@ export default function Board() {
     }
   }
 
-  function handleLoadBoard() {
-    setPieces(savedPieces!)
-  }
-
   function handleClearBoard() {
     if (confirm('配置をクリアしますか？')) {
       setPieces(generatePieces())
@@ -207,6 +224,34 @@ export default function Board() {
 
   function handleSwitchToEdit() {
     setMode('edit')
+  }
+
+  function handleFirstStepBack() {
+    if (currentMove === 0) return
+    const nextCurrentMove = 0
+    setCurrentMove(nextCurrentMove)
+    setPieces(history[nextCurrentMove])
+  }
+
+  function handleStepBack() {
+    if (currentMove === 0) return
+    const nextCurrentMove = currentMove - 1
+    setCurrentMove(nextCurrentMove)
+    setPieces(history[nextCurrentMove])
+  }
+
+  function handleStepForward() {
+    if (currentMove === history.length - 1) return
+    const nextCurrentMove = currentMove + 1
+    setCurrentMove(nextCurrentMove)
+    setPieces(history[nextCurrentMove])
+  }
+
+  function handleLastStepForward() {
+    if (currentMove === history.length - 1) return
+    const nextCurrentMove = history.length - 1
+    setCurrentMove(nextCurrentMove)
+    setPieces(history[nextCurrentMove])
   }
 
   return (
@@ -245,13 +290,36 @@ export default function Board() {
                   >
                     <FaEdit /> 盤面を編集する
                   </button>
-                  <button
-                    className="button"
-                    disabled={!saved}
-                    onClick={handleLoadBoard}
-                  >
-                    <FaHistory /> 初期盤面に戻す
-                  </button>
+                  <div className="step-buttons">
+                    <button
+                      className="step-button"
+                      onClick={handleFirstStepBack}
+                      disabled={currentMove === 0}
+                    >
+                      <FaAngleDoubleLeft />
+                    </button>
+                    <button
+                      className="step-button"
+                      onClick={handleStepBack}
+                      disabled={currentMove === 0}
+                    >
+                      <FaAngleLeft />
+                    </button>
+                    <button
+                      className="step-button"
+                      onClick={handleStepForward}
+                      disabled={currentMove === history.length - 1}
+                    >
+                      <FaAngleRight />
+                    </button>
+                    <button
+                      className="step-button"
+                      onClick={handleLastStepForward}
+                      disabled={currentMove === history.length - 1}
+                    >
+                      <FaAngleDoubleRight />
+                    </button>
+                  </div>
                 </>
               )}
             </div>
@@ -266,7 +334,7 @@ export default function Board() {
   function handleDragEnd(event: DragEndEvent) {
     if (!event.over) return
 
-    const nextPieces = pieces.slice()
+    const nextPieces = structuredClone(pieces)
 
     const movingPiece = nextPieces.find(
       (piece) =>
@@ -327,6 +395,15 @@ export default function Board() {
       }
     }
 
+    if (isEqual(pieces, nextPieces)) return
+
     setPieces(nextPieces)
+
+    if (mode == 'solve') {
+      // 末尾に新しい盤面を加える
+      const nextHistory = [...history.slice(0, currentMove + 1), nextPieces]
+      setHistory(nextHistory)
+      setCurrentMove(nextHistory.length - 1)
+    }
   }
 }
