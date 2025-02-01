@@ -59,6 +59,11 @@
   background-color: rgb(31 75 140);
 }
 
+.current-move {
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
 .step-buttons {
   display: flex;
   gap: 5px;

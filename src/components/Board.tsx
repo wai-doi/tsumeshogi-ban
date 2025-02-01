@@ -291,6 +291,7 @@ export default function Board() {
                   >
                     <FaEdit /> 盤面を編集する
                   </button>
+                  <span className="current-move">{currentMove} 手目</span>
                   <div className="step-buttons">
                     <button
                       className="step-button"
