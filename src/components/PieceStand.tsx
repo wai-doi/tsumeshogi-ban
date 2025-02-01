@@ -11,7 +11,7 @@ export default function PieceStand({ pieces }: { pieces: PieceType[] }) {
   return (
     <>
       <div ref={setNodeRef} className="piece-stand">
-        {pieces.map((piece) => {
+        {[...pieces].reverse().map((piece) => {
           return <Piece piece={piece} />
         })}
       </div>
