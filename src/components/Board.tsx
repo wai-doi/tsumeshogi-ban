@@ -199,7 +199,8 @@ export default function Board() {
   }
 
   function handleSaveBoard() {
-    if (confirm('盤面の編集を終了しますか？')) {
+    // 保存している盤面と同じであれば、確認ダイアログは表示しない
+    if (isEqual(savedPieces, pieces) || confirm('盤面の編集を終了しますか？')) {
       localStorage.setItem('pieces', JSON.stringify(pieces))
       setSaved(true)
       setMode('solve')
