@@ -389,6 +389,10 @@ export default function Board() {
           }
         }
 
+        if (mode === 'solve' && movingPiece.place === 'box') {
+          // 解答モードでは駒箱の駒を置いたら相手の駒になる
+          movingPiece.opposite = true
+        }
         movingPiece.place = 'board'
         movingPiece.row = event.over.data.current.row
         movingPiece.col = event.over.data.current.col
