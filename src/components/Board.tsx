@@ -13,7 +13,6 @@ import {
   useSensors,
 } from '@dnd-kit/core'
 import {
-  FaSave,
   FaTrash,
   FaEraser,
   FaEdit,
@@ -21,6 +20,7 @@ import {
   FaAngleLeft,
   FaAngleRight,
   FaAngleDoubleRight,
+  FaChessKing,
 } from 'react-icons/fa'
 
 export type PieceKind =
@@ -188,17 +188,29 @@ export default function Board() {
   function renderMode() {
     return (
       <div className="mode">
-        <div className={mode == 'edit' ? 'active-mode' : 'inactive-mode'}>
-          編集モード
-        </div>
-        <div className={mode == 'solve' ? 'active-mode' : 'inactive-mode'}>
-          解答モード
-        </div>
+        <button
+          className={
+            'mode-button ' + (mode == 'edit' ? 'active-mode' : 'inactive-mode')
+          }
+          onClick={handleSwitchToEdit}
+        >
+          <FaEdit /> 編集モード
+        </button>
+        <button
+          className={
+            'mode-button ' + (mode == 'solve' ? 'active-mode' : 'inactive-mode')
+          }
+          onClick={handleSaveBoard}
+        >
+          <FaChessKing /> 解答モード
+        </button>
       </div>
     )
   }
 
   function handleSaveBoard() {
+    if (mode === 'solve') return
+
     // 保存している盤面と同じであれば、確認ダイアログは表示しない
     if (isEqual(savedPieces, pieces) || confirm('盤面の編集を終了しますか？')) {
       localStorage.setItem('pieces', JSON.stringify(pieces))
@@ -224,6 +236,8 @@ export default function Board() {
   }
 
   function handleSwitchToEdit() {
+    if (mode === 'edit') return
+
     setMode('edit')
   }
 
@@ -269,7 +283,7 @@ export default function Board() {
                     className="button switch-mode-button"
                     onClick={handleSaveBoard}
                   >
-                    <FaSave /> 保存して編集を終了
+                    <FaChessKing /> 保存して解答する
                   </button>
                   <button
                     className="button"

@@ -6,15 +6,31 @@
   font-weight: bold;
 }
 
+.mode-button {
+  padding: 8px 15px;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 10px;
+  transition: all 0.3s ease;
+}
+
 .active-mode {
-  padding: 3px;
-  color: yellow;
-  border: 1px solid yellow;
+  color: white;
+  background-color: #007bff;
+  border: 2px solid #0056b3;
 }
 
 .inactive-mode {
-  padding: 3px;
-  color: gray;
+  color: #bbb;
+  background-color: #444;
+  border: 2px solid #666;
+}
+
+.inactive-mode:hover {
+  cursor: pointer;
+  background-color: #666;
+  border-color: white;
+  transform: scale(1.05);
 }
 
 .row {
