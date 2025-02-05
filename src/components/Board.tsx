@@ -212,7 +212,10 @@ export default function Board() {
     if (mode === 'solve') return
 
     // 保存している盤面と同じであれば、確認ダイアログは表示しない
-    if (isEqual(savedPieces, pieces) || confirm('盤面の編集を終了しますか？')) {
+    if (
+      isEqual(savedPieces, pieces) ||
+      confirm('盤面を保存して解答しますか？')
+    ) {
       localStorage.setItem('pieces', JSON.stringify(pieces))
       setSaved(true)
       setMode('solve')
