@@ -242,6 +242,9 @@ export default function Board() {
     if (mode === 'edit') return
 
     setMode('edit')
+    setPieces(savedPieces!)
+    setHistory([structuredClone(savedPieces!)])
+    setCurrentMove(0)
   }
 
   function handleFirstStepBack() {
