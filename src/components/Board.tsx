@@ -109,6 +109,9 @@ export default function Board() {
   })
   const sensors = useSensors(pointSensor)
 
+  const isEditing = mode === 'edit'
+  const isSolving = mode === 'solve'
+
   const handleRightOrDoubleClick: handleRightOrDoubleClickType = function (
     event,
     pieceId,
@@ -146,7 +149,7 @@ export default function Board() {
 
     setPieces(nextPieces)
 
-    if (mode == 'solve') {
+    if (isSolving) {
       // 末尾の盤面を上書きする
       const nextHistory = [...history.slice(0, currentMove), nextPieces]
       setHistory(nextHistory)
@@ -190,7 +193,7 @@ export default function Board() {
       <div className="mode">
         <button
           className={
-            'mode-button ' + (mode == 'edit' ? 'active-mode' : 'inactive-mode')
+            'mode-button ' + (isEditing ? 'active-mode' : 'inactive-mode')
           }
           onClick={handleSwitchToEdit}
         >
@@ -198,7 +201,7 @@ export default function Board() {
         </button>
         <button
           className={
-            'mode-button ' + (mode == 'solve' ? 'active-mode' : 'inactive-mode')
+            'mode-button ' + (isSolving ? 'active-mode' : 'inactive-mode')
           }
           onClick={handleSaveBoard}
         >
@@ -209,7 +212,7 @@ export default function Board() {
   }
 
   function handleSaveBoard() {
-    if (mode === 'solve') return
+    if (isSolving) return
 
     // 保存している盤面と同じであれば、確認ダイアログは表示しない
     if (
@@ -239,7 +242,7 @@ export default function Board() {
   }
 
   function handleSwitchToEdit() {
-    if (mode === 'edit') return
+    if (isEditing) return
 
     setMode('edit')
     setPieces(savedPieces!)
@@ -283,7 +286,7 @@ export default function Board() {
           <div className="board">{renderBoard()}</div>
           <div className="button-stand">
             <div className="buttons">
-              {mode == 'edit' && (
+              {isEditing && (
                 <>
                   <button
                     className="button switch-mode-button"
@@ -303,7 +306,7 @@ export default function Board() {
                   </button>
                 </>
               )}
-              {mode == 'solve' && (
+              {isSolving && (
                 <>
                   <button
                     className="button switch-mode-button"
@@ -411,7 +414,7 @@ export default function Board() {
           }
         }
 
-        if (mode === 'solve' && movingPiece.place === 'box') {
+        if (isSolving && movingPiece.place === 'box') {
           // 解答モードでは駒箱の駒を置いたら相手の駒になる
           movingPiece.opposite = true
         }
@@ -425,7 +428,7 @@ export default function Board() {
 
     setPieces(nextPieces)
 
-    if (mode == 'solve') {
+    if (isSolving) {
       // 末尾に新しい盤面を加える
       const nextHistory = [...history.slice(0, currentMove + 1), nextPieces]
       setHistory(nextHistory)
