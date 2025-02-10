@@ -158,7 +158,9 @@ export default function Board() {
 
   const piecesOnBoard = pieces.filter((piece) => piece.place === 'board')
   const piecesInStand = pieces.filter((piece) => piece.place === 'stand')
-  const piecesInBox = pieces.filter((piece) => piece.place === 'box')
+  const piecesInBox = pieces.filter(
+    (piece) => piece.place === 'box' && !(isSolving && piece.kind === 'king'),
+  )
 
   function renderBoard() {
     return <>{[...Array(9)].map((_, row) => renderRow(row))}</>
