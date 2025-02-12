@@ -369,6 +369,10 @@ export default function Board() {
         (event.active.data.current && event.active.data.current.piece.id),
     )!
 
+    // 解答モードのとき駒箱からは出せるのは相手番のみ
+    if (isSolving && movingPiece.place === 'box' && currentMove % 2 === 0)
+      return
+
     switch (event.over.id) {
       case 'piece-box':
         // 駒箱に駒を移動させるとき
