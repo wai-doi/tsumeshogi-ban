@@ -7,8 +7,9 @@ import BishopImage from './BishopImage'
 import RookImage from './RookImage'
 import KingImage from './KingImage'
 import './Piece.css'
+import { useContext } from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { PieceType, handleRightOrDoubleClickType } from '../Board'
+import { PieceType, handleRightOrDoubleClickType, ModeContext } from '../Board'
 
 export default function Piece({
   piece,
@@ -17,10 +18,13 @@ export default function Piece({
   piece: PieceType
   onRightOrDoubleClick?: handleRightOrDoubleClickType
 }) {
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: piece.id,
-    data: { piece: piece },
-  })
+  const { attributes, listeners, setNodeRef, transform, isDragging } =
+    useDraggable({
+      id: piece.id,
+      data: { piece: piece },
+    })
+
+  const mode = useContext(ModeContext)
 
   const style = transform
     ? {
@@ -59,6 +63,10 @@ export default function Piece({
 
   const imagePath = () => {
     const imageSet = getImageSet()!
+
+    // 解答モードで駒箱からドラッグするとき相手の駒にする
+    if (mode === 'solve' && piece.place === 'box' && isDragging)
+      return imageSet.opposite
 
     if (!piece.promoted && !piece.opposite) {
       return imageSet.normal

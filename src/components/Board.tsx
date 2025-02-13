@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { createContext, useState } from 'react'
 import { isEqual } from 'lodash'
 import './Board.css'
 import PieceStand from './PieceStand.tsx'
@@ -52,6 +52,8 @@ export type handleRightOrDoubleClickType = (
   event: React.MouseEvent,
   pieceID: string,
 ) => void
+
+export const ModeContext = createContext('edit')
 
 export default function Board() {
   function generatePieces(): PieceType[] {
@@ -282,79 +284,81 @@ export default function Board() {
 
   return (
     <>
-      <div>{renderMode()}</div>
-      <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
-        <div className="board-container">
-          <div className="board">{renderBoard()}</div>
-          <div className="button-stand">
-            <div className="buttons">
-              {isEditing && (
-                <>
-                  <button
-                    className="button switch-mode-button"
-                    onClick={handleSaveBoard}
-                  >
-                    <FaChessKing /> 保存して解答する
-                  </button>
-                  <button
-                    className="button"
-                    disabled={!saved}
-                    onClick={handleDeleteSavedBoard}
-                  >
-                    <FaTrash /> 保存した配置を消す
-                  </button>
-                  <button className="button" onClick={handleClearBoard}>
-                    <FaEraser /> 配置をクリア
-                  </button>
-                </>
-              )}
-              {isSolving && (
-                <>
-                  <button
-                    className="button switch-mode-button"
-                    onClick={handleSwitchToEdit}
-                  >
-                    <FaEdit /> 盤面を編集する
-                  </button>
-                  <span className="current-move">{currentMove} 手目</span>
-                  <div className="step-buttons">
+      <ModeContext.Provider value={mode}>
+        <div>{renderMode()}</div>
+        <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
+          <div className="board-container">
+            <div className="board">{renderBoard()}</div>
+            <div className="button-stand">
+              <div className="buttons">
+                {isEditing && (
+                  <>
                     <button
-                      className="step-button"
-                      onClick={handleFirstStepBack}
-                      disabled={currentMove === 0}
+                      className="button switch-mode-button"
+                      onClick={handleSaveBoard}
                     >
-                      <FaAngleDoubleLeft />
+                      <FaChessKing /> 保存して解答する
                     </button>
                     <button
-                      className="step-button"
-                      onClick={handleStepBack}
-                      disabled={currentMove === 0}
+                      className="button"
+                      disabled={!saved}
+                      onClick={handleDeleteSavedBoard}
                     >
-                      <FaAngleLeft />
+                      <FaTrash /> 保存した配置を消す
                     </button>
+                    <button className="button" onClick={handleClearBoard}>
+                      <FaEraser /> 配置をクリア
+                    </button>
+                  </>
+                )}
+                {isSolving && (
+                  <>
                     <button
-                      className="step-button"
-                      onClick={handleStepForward}
-                      disabled={currentMove === history.length - 1}
+                      className="button switch-mode-button"
+                      onClick={handleSwitchToEdit}
                     >
-                      <FaAngleRight />
+                      <FaEdit /> 盤面を編集する
                     </button>
-                    <button
-                      className="step-button"
-                      onClick={handleLastStepForward}
-                      disabled={currentMove === history.length - 1}
-                    >
-                      <FaAngleDoubleRight />
-                    </button>
-                  </div>
-                </>
-              )}
+                    <span className="current-move">{currentMove} 手目</span>
+                    <div className="step-buttons">
+                      <button
+                        className="step-button"
+                        onClick={handleFirstStepBack}
+                        disabled={currentMove === 0}
+                      >
+                        <FaAngleDoubleLeft />
+                      </button>
+                      <button
+                        className="step-button"
+                        onClick={handleStepBack}
+                        disabled={currentMove === 0}
+                      >
+                        <FaAngleLeft />
+                      </button>
+                      <button
+                        className="step-button"
+                        onClick={handleStepForward}
+                        disabled={currentMove === history.length - 1}
+                      >
+                        <FaAngleRight />
+                      </button>
+                      <button
+                        className="step-button"
+                        onClick={handleLastStepForward}
+                        disabled={currentMove === history.length - 1}
+                      >
+                        <FaAngleDoubleRight />
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
+              <PieceStand pieces={piecesInStand} />
             </div>
-            <PieceStand pieces={piecesInStand} />
           </div>
-        </div>
-        <PieceBox pieces={piecesInBox} />
-      </DndContext>
+          <PieceBox pieces={piecesInBox} />
+        </DndContext>
+      </ModeContext.Provider>
     </>
   )
 
