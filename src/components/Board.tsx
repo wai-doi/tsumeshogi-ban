@@ -288,7 +288,21 @@ export default function Board() {
         <div>{renderMode()}</div>
         <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
           <div className="board-container">
-            <div className="board">{renderBoard()}</div>
+            <div className="board-and-row-numbers">
+              <div>
+                <div className="column-numbers">
+                  {'987654321'.split('').map((num) => (
+                    <span>{num}</span>
+                  ))}
+                </div>
+                <div className="board">{renderBoard()}</div>
+              </div>
+              <div className="row-numbers">
+                {'一二三四五六七八九'.split('').map((num) => (
+                  <span>{num}</span>
+                ))}
+              </div>
+            </div>
             <div className="button-stand">
               <div className="buttons">
                 {isEditing && (
