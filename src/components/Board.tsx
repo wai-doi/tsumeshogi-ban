@@ -53,7 +53,7 @@ export type handleRightOrDoubleClickType = (
   pieceID: string,
 ) => void
 
-export const ModeContext = createContext('edit')
+export const ModeContext = createContext<Mode>('edit')
 
 export default function Board() {
   function generatePieces(): PieceType[] {
