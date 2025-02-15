@@ -130,8 +130,10 @@ export default function Board() {
       piece.promoted = true
       piece.opposite = false
     } else if (
-      (piece.promoted && !piece.opposite) ||
-      (!piece.promotable && !piece.promoted && !piece.opposite)
+      (isEditing && piece.promoted && !piece.opposite) ||
+      (isEditing && !piece.promotable && !piece.promoted && !piece.opposite) ||
+      (isSolving && piece.promoted && piece.opposite) ||
+      (isSolving && !piece.promotable && !piece.promoted && piece.opposite)
     ) {
       // 相手の駒にする
       piece.promoted = false
@@ -141,8 +143,10 @@ export default function Board() {
       piece.promoted = true
       piece.opposite = true
     } else if (
-      (piece.promoted && piece.opposite) ||
-      (!piece.promotable && !piece.promoted && piece.opposite)
+      (isEditing && piece.promoted && piece.opposite) ||
+      (isEditing && !piece.promotable && !piece.promoted && piece.opposite) ||
+      (isSolving && piece.promoted && !piece.opposite) ||
+      (isSolving && !piece.promotable && !piece.promoted && !piece.opposite)
     ) {
       // 自分の駒にする
       piece.promoted = false
