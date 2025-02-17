@@ -27,22 +27,18 @@ export default function PieceBox({ pieces }: { pieces: PieceType[] }) {
 
   return (
     <div ref={setNodeRef} className="piece-box">
-      {groupedPieces().map(({ pieceArray }) => {
-        return (
-          <div>
-            <div className="piece-group">
-              {pieceArray.map((piece) => {
-                return (
-                  <div className="overlay">
-                    <Piece piece={piece} />
-                  </div>
-                )
-              })}
-            </div>
-            <span className="piece-number">✖️{pieceArray.length}</span>
+      {groupedPieces().map(({ kind, pieceArray }) => (
+        <div key={kind}>
+          <div className="piece-group">
+            {pieceArray.map((piece) => (
+              <div key={piece.id} className="overlay">
+                <Piece piece={piece} />
+              </div>
+            ))}
           </div>
-        )
-      })}
+          <span className="piece-number">✖️{pieceArray.length}</span>
+        </div>
+      ))}
     </div>
   )
 }

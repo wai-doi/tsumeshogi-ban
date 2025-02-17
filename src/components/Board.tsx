@@ -174,13 +174,13 @@ export default function Board() {
 
   function renderRow(row: number) {
     return (
-      <div className="row">
+      <div key={row} className="row">
         {[...Array(9)].map((_, col) => {
           const piece = piecesOnBoard.find(
             (piece) => piece.row === row && piece.col === col,
           )
           return (
-            <Square row={row} col={col}>
+            <Square key={col} row={row} col={col}>
               {piece ? (
                 <Piece
                   piece={piece}
@@ -296,14 +296,14 @@ export default function Board() {
               <div>
                 <div className="column-numbers">
                   {'987654321'.split('').map((num) => (
-                    <span>{num}</span>
+                    <span key={num}>{num}</span>
                   ))}
                 </div>
                 <div className="board">{renderBoard()}</div>
               </div>
               <div className="row-numbers">
                 {'一二三四五六七八九'.split('').map((num) => (
-                  <span>{num}</span>
+                  <span key={num}>{num}</span>
                 ))}
               </div>
             </div>
