@@ -26,11 +26,12 @@ export default function Piece({
 
   const mode = useContext(ModeContext)
 
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined
+  const style = {
+    transform: transform
+      ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
+      : undefined,
+    cursor: isDragging ? 'grabbing' : 'grab',
+  }
 
   const getImageSet = () => {
     switch (piece.kind) {
