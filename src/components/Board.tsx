@@ -424,6 +424,8 @@ export default function Board() {
 
         if (capturedPiece) {
           if (!movingPiece.opposite && capturedPiece.opposite) {
+            // 相手の駒の上には持ち駒は打てない
+            if (isSolving && movingPiece.place === 'stand') return
             // 自分の駒が相手の駒を取るとき
             capturedPiece.place = 'stand'
             capturedPiece.row = null
