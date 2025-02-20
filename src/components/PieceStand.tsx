@@ -1,9 +1,9 @@
 import './PieceStand.css'
 import { useDroppable } from '@dnd-kit/core'
-import { PieceType } from './Board'
+import { PieceData } from './Board'
 import Piece from './pieces/Piece'
 
-export default function PieceStand({ pieces }: { pieces: PieceType[] }) {
+export default function PieceStand({ pieces }: { pieces: PieceData[] }) {
   const { setNodeRef } = useDroppable({
     id: 'piece-stand',
   })

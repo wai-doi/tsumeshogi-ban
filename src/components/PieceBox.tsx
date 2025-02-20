@@ -1,15 +1,15 @@
 import './PieceBox.css'
 import { useDroppable } from '@dnd-kit/core'
-import { PieceType, PieceKind } from './Board'
+import { PieceData, PieceKind } from './Board'
 import Piece from './pieces/Piece'
 
-export default function PieceBox({ pieces }: { pieces: PieceType[] }) {
+export default function PieceBox({ pieces }: { pieces: PieceData[] }) {
   const { setNodeRef } = useDroppable({
     id: 'piece-box',
   })
 
   function groupedPieces() {
-    const groupedPieces: { kind: PieceKind; pieceArray: PieceType[] }[] = []
+    const groupedPieces: { kind: PieceKind; pieceArray: PieceData[] }[] = []
     pieces.forEach((piece) => {
       const pieceArray = groupedPieces.find(
         ({ kind }) => kind === piece.kind,

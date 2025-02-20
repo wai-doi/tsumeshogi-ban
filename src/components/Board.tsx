@@ -35,7 +35,7 @@ export type PieceKind =
 
 type Place = 'board' | 'stand' | 'box'
 
-export type PieceType = {
+export type PieceData = {
   id: string
   kind: PieceKind
   place: Place
@@ -56,7 +56,7 @@ export type handleRightOrDoubleClickType = (
 export const ModeContext = createContext<Mode>('edit')
 
 export default function Board() {
-  function generatePieces(): PieceType[] {
+  function generatePieces(): PieceData[] {
     const pieceNumber: { kind: PieceKind; number: number }[] = [
       { kind: 'pawn', number: 18 },
       { kind: 'lance', number: 4 },
@@ -68,7 +68,7 @@ export default function Board() {
       { kind: 'king', number: 2 },
     ]
 
-    function initialPiece(kind: PieceKind, id: number): PieceType {
+    function initialPiece(kind: PieceKind, id: number): PieceData {
       const promotable = !(kind === 'gold' || kind === 'king')
 
       return {
@@ -90,17 +90,17 @@ export default function Board() {
       .flat()
   }
 
-  const savedPieces: PieceType[] | null = JSON.parse(
+  const savedPieces: PieceData[] | null = JSON.parse(
     localStorage.getItem('pieces') || 'null',
   )
 
-  const [pieces, setPieces] = useState<PieceType[]>(
+  const [pieces, setPieces] = useState<PieceData[]>(
     savedPieces || generatePieces(),
   )
   const [saved, setSaved] = useState<boolean>(!!savedPieces)
   const [mode, setMode] = useState<Mode>('edit')
   const [currentMove, setCurrentMove] = useState<number>(0)
-  const [history, setHistory] = useState<PieceType[][]>([
+  const [history, setHistory] = useState<PieceData[][]>([
     structuredClone(pieces),
   ])
 
