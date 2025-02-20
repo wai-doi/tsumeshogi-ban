@@ -5,6 +5,7 @@ import PieceStand from './PieceStand.tsx'
 import PieceBox from './PieceBox.tsx'
 import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
+import { usePiecesHistory } from '../hooks/usePiecesHistory'
 import {
   DndContext,
   DragEndEvent,
@@ -99,10 +100,18 @@ export default function Board() {
   )
   const [saved, setSaved] = useState<boolean>(!!savedPieces)
   const [mode, setMode] = useState<Mode>('edit')
-  const [currentMove, setCurrentMove] = useState<number>(0)
-  const [history, setHistory] = useState<PieceData[][]>([
-    structuredClone(pieces),
-  ])
+
+  const {
+    currentMove,
+    initializePiecesHistory,
+    savePiecesHistory,
+    firstStepBack,
+    stepBack,
+    stepForward,
+    lastStepForward,
+    isFirstMove,
+    isLastMove,
+  } = usePiecesHistory(pieces, setPieces)
 
   const pointSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -155,11 +164,7 @@ export default function Board() {
 
     setPieces(nextPieces)
 
-    if (isSolving) {
-      // 末尾の盤面を上書きする
-      const nextHistory = [...history.slice(0, currentMove), nextPieces]
-      setHistory(nextHistory)
-    }
+    if (isSolving) savePiecesHistory(nextPieces)
   }
 
   const piecesOnBoard = pieces.filter((piece) => piece.place === 'board')
@@ -230,7 +235,7 @@ export default function Board() {
       localStorage.setItem('pieces', JSON.stringify(pieces))
       setSaved(true)
       setMode('solve')
-      setHistory([structuredClone(pieces)])
+      initializePiecesHistory()
     }
   }
 
@@ -254,36 +259,6 @@ export default function Board() {
 
     setMode('edit')
     setPieces(savedPieces!)
-    setHistory([structuredClone(savedPieces!)])
-    setCurrentMove(0)
-  }
-
-  function handleFirstStepBack() {
-    if (currentMove === 0) return
-    const nextCurrentMove = 0
-    setCurrentMove(nextCurrentMove)
-    setPieces(history[nextCurrentMove])
-  }
-
-  function handleStepBack() {
-    if (currentMove === 0) return
-    const nextCurrentMove = currentMove - 1
-    setCurrentMove(nextCurrentMove)
-    setPieces(history[nextCurrentMove])
-  }
-
-  function handleStepForward() {
-    if (currentMove === history.length - 1) return
-    const nextCurrentMove = currentMove + 1
-    setCurrentMove(nextCurrentMove)
-    setPieces(history[nextCurrentMove])
-  }
-
-  function handleLastStepForward() {
-    if (currentMove === history.length - 1) return
-    const nextCurrentMove = history.length - 1
-    setCurrentMove(nextCurrentMove)
-    setPieces(history[nextCurrentMove])
   }
 
   return (
@@ -341,29 +316,29 @@ export default function Board() {
                     <div className="step-buttons">
                       <button
                         className="step-button"
-                        onClick={handleFirstStepBack}
-                        disabled={currentMove === 0}
+                        onClick={firstStepBack}
+                        disabled={isFirstMove()}
                       >
                         <FaAngleDoubleLeft />
                       </button>
                       <button
                         className="step-button"
-                        onClick={handleStepBack}
-                        disabled={currentMove === 0}
+                        onClick={stepBack}
+                        disabled={isFirstMove()}
                       >
                         <FaAngleLeft />
                       </button>
                       <button
                         className="step-button"
-                        onClick={handleStepForward}
-                        disabled={currentMove === history.length - 1}
+                        onClick={stepForward}
+                        disabled={isLastMove()}
                       >
                         <FaAngleRight />
                       </button>
                       <button
                         className="step-button"
-                        onClick={handleLastStepForward}
-                        disabled={currentMove === history.length - 1}
+                        onClick={lastStepForward}
+                        disabled={isLastMove()}
                       >
                         <FaAngleDoubleRight />
                       </button>
@@ -458,11 +433,6 @@ export default function Board() {
 
     setPieces(nextPieces)
 
-    if (isSolving) {
-      // 末尾に新しい盤面を加える
-      const nextHistory = [...history.slice(0, currentMove + 1), nextPieces]
-      setHistory(nextHistory)
-      setCurrentMove(nextHistory.length - 1)
-    }
+    if (isSolving) savePiecesHistory(nextPieces)
   }
 }
