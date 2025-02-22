@@ -94,7 +94,7 @@ export default function Board() {
   const [savedPieces, setSavedPieces] = useState<PieceData[] | null>(
     JSON.parse(localStorage.getItem('pieces') || 'null'),
   )
-  const [pieces, setPieces] = useState<PieceData[]>(
+  const [currentPieces, setCurrentPieces] = useState<PieceData[]>(
     savedPieces || generatePieces(),
   )
   const [mode, setMode] = useState<Mode>('edit')
@@ -109,7 +109,7 @@ export default function Board() {
     lastStepForward,
     isFirstMove,
     isLastMove,
-  } = usePiecesHistory(pieces, setPieces)
+  } = usePiecesHistory(currentPieces, setCurrentPieces)
 
   const pointSensor = useSensor(PointerSensor, {
     activationConstraint: {
@@ -126,7 +126,7 @@ export default function Board() {
     pieceId,
   ) {
     event.preventDefault()
-    const nextPieces = structuredClone(pieces)
+    const nextPieces = structuredClone(currentPieces)
     const piece = nextPieces.find((p) => p.id === pieceId)
     if (!piece) return
 
@@ -160,14 +160,14 @@ export default function Board() {
       piece.opposite = false
     }
 
-    setPieces(nextPieces)
+    setCurrentPieces(nextPieces)
 
     if (isSolving) savePiecesHistory(nextPieces)
   }
 
-  const piecesOnBoard = pieces.filter((piece) => piece.place === 'board')
-  const piecesInStand = pieces.filter((piece) => piece.place === 'stand')
-  const piecesInBox = pieces.filter(
+  const piecesOnBoard = currentPieces.filter((piece) => piece.place === 'board')
+  const piecesInStand = currentPieces.filter((piece) => piece.place === 'stand')
+  const piecesInBox = currentPieces.filter(
     (piece) => piece.place === 'box' && !(isSolving && piece.kind === 'king'),
   )
 
@@ -227,11 +227,11 @@ export default function Board() {
 
     // 保存している盤面と同じであれば、確認ダイアログは表示しない
     if (
-      isEqual(savedPieces, pieces) ||
+      isEqual(savedPieces, currentPieces) ||
       confirm('盤面を保存して解答しますか？')
     ) {
-      localStorage.setItem('pieces', JSON.stringify(pieces))
-      setSavedPieces(pieces)
+      localStorage.setItem('pieces', JSON.stringify(currentPieces))
+      setSavedPieces(currentPieces)
       setMode('solve')
       initializePiecesHistory()
     }
@@ -248,7 +248,7 @@ export default function Board() {
 
   function handleClearBoard() {
     if (confirm('配置をクリアしますか？')) {
-      setPieces(generatePieces())
+      setCurrentPieces(generatePieces())
     }
   }
 
@@ -256,7 +256,7 @@ export default function Board() {
     if (isEditing) return
 
     setMode('edit')
-    setPieces(savedPieces!)
+    setCurrentPieces(savedPieces!)
   }
 
   return (
@@ -356,7 +356,7 @@ export default function Board() {
   function handleDragEnd(event: DragEndEvent) {
     if (!event.over) return
 
-    const nextPieces = structuredClone(pieces)
+    const nextPieces = structuredClone(currentPieces)
 
     const movingPiece = nextPieces.find(
       (piece) =>
@@ -427,9 +427,9 @@ export default function Board() {
       }
     }
 
-    if (isEqual(pieces, nextPieces)) return
+    if (isEqual(currentPieces, nextPieces)) return
 
-    setPieces(nextPieces)
+    setCurrentPieces(nextPieces)
 
     if (isSolving) savePiecesHistory(nextPieces)
   }
