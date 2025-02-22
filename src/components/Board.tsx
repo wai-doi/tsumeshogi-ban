@@ -5,6 +5,7 @@ import PieceStand from './PieceStand.tsx'
 import PieceBox from './PieceBox.tsx'
 import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
+import { useSavedPieces } from '../hooks/useSavedPieces'
 import { usePiecesHistory } from '../hooks/usePiecesHistory'
 import {
   DndContext,
@@ -91,9 +92,7 @@ export default function Board() {
       .flat()
   }
 
-  const [savedPieces, setSavedPieces] = useState<PieceData[] | null>(
-    JSON.parse(localStorage.getItem('pieces') || 'null'),
-  )
+  const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()
   const [currentPieces, setCurrentPieces] = useState<PieceData[]>(
     savedPieces || generatePieces(),
   )
@@ -230,8 +229,7 @@ export default function Board() {
       isEqual(savedPieces, currentPieces) ||
       confirm('盤面を保存して解答しますか？')
     ) {
-      localStorage.setItem('pieces', JSON.stringify(currentPieces))
-      setSavedPieces(currentPieces)
+      savePieces(currentPieces)
       setMode('solve')
       initializePiecesHistory()
     }
@@ -241,8 +239,7 @@ export default function Board() {
     if (!savedPieces) return
 
     if (confirm('保存した配置を消しますか？')) {
-      localStorage.removeItem('pieces')
-      setSavedPieces(null)
+      deleteSavedPieces()
     }
   }
 
