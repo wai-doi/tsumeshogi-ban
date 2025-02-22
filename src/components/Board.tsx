@@ -91,14 +91,12 @@ export default function Board() {
       .flat()
   }
 
-  const savedPieces: PieceData[] | null = JSON.parse(
-    localStorage.getItem('pieces') || 'null',
+  const [savedPieces, setSavedPieces] = useState<PieceData[] | null>(
+    JSON.parse(localStorage.getItem('pieces') || 'null'),
   )
-
   const [pieces, setPieces] = useState<PieceData[]>(
     savedPieces || generatePieces(),
   )
-  const [saved, setSaved] = useState<boolean>(!!savedPieces)
   const [mode, setMode] = useState<Mode>('edit')
 
   const {
@@ -233,18 +231,18 @@ export default function Board() {
       confirm('盤面を保存して解答しますか？')
     ) {
       localStorage.setItem('pieces', JSON.stringify(pieces))
-      setSaved(true)
+      setSavedPieces(pieces)
       setMode('solve')
       initializePiecesHistory()
     }
   }
 
   function handleDeleteSavedBoard() {
-    if (!saved) return
+    if (!savedPieces) return
 
     if (confirm('保存した配置を消しますか？')) {
       localStorage.removeItem('pieces')
-      setSaved(false)
+      setSavedPieces(null)
     }
   }
 
@@ -294,7 +292,7 @@ export default function Board() {
                     </button>
                     <button
                       className="button"
-                      disabled={!saved}
+                      disabled={!savedPieces}
                       onClick={handleDeleteSavedBoard}
                     >
                       <FaTrash /> 保存した配置を消す
