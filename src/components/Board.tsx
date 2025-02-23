@@ -5,6 +5,7 @@ import PieceStand from './PieceStand.tsx'
 import PieceBox from './PieceBox.tsx'
 import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
+import { ModeButton } from './ModeButton.tsx'
 import { useSavedPieces } from '../hooks/useSavedPieces'
 import { usePiecesHistory } from '../hooks/usePiecesHistory'
 import {
@@ -198,29 +199,6 @@ export default function Board() {
     )
   }
 
-  function renderMode() {
-    return (
-      <div className="mode">
-        <button
-          className={
-            'mode-button ' + (isEditing ? 'active-mode' : 'inactive-mode')
-          }
-          onClick={handleSwitchToEdit}
-        >
-          <FaEdit /> 編集モード
-        </button>
-        <button
-          className={
-            'mode-button ' + (isSolving ? 'active-mode' : 'inactive-mode')
-          }
-          onClick={handleSaveBoard}
-        >
-          <FaChessKing /> 解答モード
-        </button>
-      </div>
-    )
-  }
-
   function handleSaveBoard() {
     if (isSolving) return
 
@@ -259,7 +237,14 @@ export default function Board() {
   return (
     <>
       <ModeContext.Provider value={mode}>
-        <div>{renderMode()}</div>
+        <div className="mode-button-container">
+          <ModeButton isActive={isEditing} handleOnClick={handleSwitchToEdit}>
+            <FaEdit /> 編集モード
+          </ModeButton>
+          <ModeButton isActive={isSolving} handleOnClick={handleSaveBoard}>
+            <FaChessKing /> 解答モード
+          </ModeButton>
+        </div>
         <DndContext onDragEnd={handleDragEnd} sensors={sensors}>
           <div className="board-container">
             <div className="board-and-row-numbers">
