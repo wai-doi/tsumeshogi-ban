@@ -7,6 +7,7 @@ import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
 import { ModeButton } from './ModeButton.tsx'
 import { useSavedPieces } from '../hooks/useSavedPieces'
+import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory'
 import {
   DndContext,
@@ -59,44 +60,9 @@ export type handleRightOrDoubleClickType = (
 export const ModeContext = createContext<Mode>('edit')
 
 export default function Board() {
-  function generatePieces(): PieceData[] {
-    const pieceNumber: { kind: PieceKind; number: number }[] = [
-      { kind: 'pawn', number: 18 },
-      { kind: 'lance', number: 4 },
-      { kind: 'knight', number: 4 },
-      { kind: 'silver', number: 4 },
-      { kind: 'gold', number: 4 },
-      { kind: 'bishop', number: 2 },
-      { kind: 'rook', number: 2 },
-      { kind: 'king', number: 2 },
-    ]
-
-    function initialPiece(kind: PieceKind, id: number): PieceData {
-      const promotable = !(kind === 'gold' || kind === 'king')
-
-      return {
-        id: `${kind}-${id}`,
-        kind: kind,
-        place: 'box',
-        row: null,
-        col: null,
-        promoted: false,
-        opposite: false,
-        promotable: promotable,
-      }
-    }
-
-    return pieceNumber
-      .map(({ kind, number }) => {
-        return [...Array(number)].map((_, i) => initialPiece(kind, i))
-      })
-      .flat()
-  }
-
   const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()
-  const [currentPieces, setCurrentPieces] = useState<PieceData[]>(
-    savedPieces || generatePieces(),
-  )
+  const { currentPieces, setCurrentPieces, clearCurrentPieces } =
+    useCurrentPieces(savedPieces)
   const [mode, setMode] = useState<Mode>('edit')
 
   const {
@@ -223,7 +189,7 @@ export default function Board() {
 
   function handleClearBoard() {
     if (confirm('配置をクリアしますか？')) {
-      setCurrentPieces(generatePieces())
+      clearCurrentPieces()
     }
   }
 
