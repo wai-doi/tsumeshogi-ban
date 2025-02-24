@@ -9,14 +9,14 @@ import KingImage from './KingImage'
 import './Piece.css'
 import { useContext } from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { PieceData, handleRightOrDoubleClickType, ModeContext } from '../Board'
+import { PieceData, ModeContext } from '../Board'
 
 export default function Piece({
   piece,
   onRightOrDoubleClick,
 }: {
   piece: PieceData
-  onRightOrDoubleClick?: handleRightOrDoubleClickType
+  onRightOrDoubleClick?: (event: React.MouseEvent, pieceID: string) => void
 }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
