@@ -6,6 +6,8 @@ import PieceBox from './PieceBox.tsx'
 import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
 import { ModeButton } from './ModeButton.tsx'
+import { ColumnNumbers } from './ColumnNumbers.tsx'
+import { RowNumbers } from './rowNumbers.tsx'
 import { useSavedPieces } from '../hooks/useSavedPieces'
 import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory'
@@ -215,18 +217,10 @@ export default function Board() {
           <div className="board-container">
             <div className="board-and-row-numbers">
               <div>
-                <div className="column-numbers">
-                  {'987654321'.split('').map((num) => (
-                    <span key={num}>{num}</span>
-                  ))}
-                </div>
+                <ColumnNumbers />
                 <div className="board">{renderBoard()}</div>
               </div>
-              <div className="row-numbers">
-                {'一二三四五六七八九'.split('').map((num) => (
-                  <span key={num}>{num}</span>
-                ))}
-              </div>
+              <RowNumbers />
             </div>
             <div className="button-stand">
               <div className="buttons">

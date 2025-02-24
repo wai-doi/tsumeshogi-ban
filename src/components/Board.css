@@ -6,27 +6,9 @@
   font-weight: bold;
 }
 
-.column-numbers {
-  display: flex;
-  justify-content: space-between;
-  padding: 0 33px;
-  font-size: small;
-  color: gray;
-}
-
 .board-and-row-numbers {
   display: flex;
   gap: 2px;
-}
-
-.row-numbers {
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  padding-top: 48px;
-  padding-bottom: 30px;
-  font-size: small;
-  color: gray;
 }
 
 .row {
