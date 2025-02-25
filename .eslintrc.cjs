@@ -5,6 +5,7 @@ module.exports = {
     'eslint:recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
+    'plugin:import/recommended',
     'prettier',
   ],
   ignorePatterns: ['dist', '.eslintrc.cjs'],
@@ -14,6 +15,17 @@ module.exports = {
     'react-refresh/only-export-components': [
       'warn',
       { allowConstantExport: true },
+    ],
+    'import/order': [
+      'error',
+      {
+        named: true,
+        alphabetize: {
+          order: 'asc',
+        },
+        'newlines-between': 'always',
+        warnOnUnassignedImports: true,
+      },
     ],
   },
 }

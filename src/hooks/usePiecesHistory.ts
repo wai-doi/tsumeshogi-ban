@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { PieceData } from '../components/Board'
+
+import { PieceData } from '../components/Board.tsx'
 
 export function usePiecesHistory(
   currentPieces: PieceData[],

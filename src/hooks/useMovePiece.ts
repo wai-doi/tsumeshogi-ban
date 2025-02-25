@@ -1,7 +1,8 @@
-import { useContext } from 'react'
+import type { DragEndEvent } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
-import { PieceData, ModeContext } from '../components/Board'
-import { DragEndEvent } from '@dnd-kit/core'
+import { useContext } from 'react'
+
+import { ModeContext, PieceData } from '../components/Board.tsx'
 
 export function useMovePiece(
   currentPieces: PieceData[],

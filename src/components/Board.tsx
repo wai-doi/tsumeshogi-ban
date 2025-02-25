@@ -1,28 +1,30 @@
-import { createContext, useState } from 'react'
-import { isEqual } from 'lodash'
-import './Board.css'
-import PieceStand from './PieceStand.tsx'
-import PieceBox from './PieceBox.tsx'
-import Square from './Square.tsx'
-import Piece from './pieces/Piece.tsx'
-import { ModeButton } from './ModeButton.tsx'
-import { ColumnNumbers } from './ColumnNumbers.tsx'
-import { RowNumbers } from './RowNumbers.tsx'
-import { useSavedPieces } from '../hooks/useSavedPieces'
-import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
-import { usePiecesHistory } from '../hooks/usePiecesHistory'
-import { useMovePiece } from '../hooks/useMovePiece'
 import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
+import { isEqual } from 'lodash'
+import { createContext, useState } from 'react'
 import {
-  FaTrash,
-  FaEraser,
-  FaEdit,
   FaAngleDoubleLeft,
+  FaAngleDoubleRight,
   FaAngleLeft,
   FaAngleRight,
-  FaAngleDoubleRight,
   FaChessKing,
+  FaEdit,
+  FaEraser,
+  FaTrash,
 } from 'react-icons/fa'
+
+import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
+import { useMovePiece } from '../hooks/useMovePiece.ts'
+import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
+import { useSavedPieces } from '../hooks/useSavedPieces.ts'
+
+import './Board.css'
+import { ColumnNumbers } from './ColumnNumbers.tsx'
+import { ModeButton } from './ModeButton.tsx'
+import PieceBox from './PieceBox.tsx'
+import PieceStand from './PieceStand.tsx'
+import { RowNumbers } from './RowNumbers.tsx'
+import Square from './Square.tsx'
+import Piece from './pieces/Piece.tsx'
 
 export type PieceKind =
   | 'pawn'

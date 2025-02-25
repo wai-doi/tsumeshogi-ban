@@ -1,5 +1,6 @@
-import './Square.css'
 import { useDroppable } from '@dnd-kit/core'
+
+import './Square.css'
 
 export default function Square({
   row,
