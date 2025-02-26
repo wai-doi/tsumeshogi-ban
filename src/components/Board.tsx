@@ -40,6 +40,7 @@ export default function Board() {
   } = usePiecesHistory(currentPieces, setCurrentPieces)
 
   const { flipPiece, dropPiece } = useMovePiece(
+    mode,
     currentPieces,
     setCurrentPieces,
     currentMove,

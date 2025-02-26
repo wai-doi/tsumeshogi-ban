@@ -1,17 +1,15 @@
 import type { DragEndEvent } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
-import { useContext } from 'react'
 
-import { ModeContext } from '../components/Board.tsx'
-import type { PieceData } from '../types.ts'
+import type { Mode, PieceData } from '../types.ts'
 
 export function useMovePiece(
+  mode: Mode,
   currentPieces: PieceData[],
   setCurrentPieces: React.Dispatch<React.SetStateAction<PieceData[]>>,
   currentMove: number,
   savePiecesHistory: (nextPieces: PieceData[]) => void,
 ) {
-  const mode = useContext(ModeContext)
   const isEditing = mode === 'edit'
   const isSolving = mode === 'solve'
 
