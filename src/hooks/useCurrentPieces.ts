@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import { PieceData, PieceKind } from '../components/Board.tsx'
+import type { PieceData, PieceKind } from '../types.ts'
 
 export function useCurrentPieces(savedPieces: PieceData[] | null) {
   const [currentPieces, setCurrentPieces] = useState<PieceData[]>(

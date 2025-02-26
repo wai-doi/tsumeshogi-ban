@@ -16,6 +16,7 @@ import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { useMovePiece } from '../hooks/useMovePiece.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
 import { useSavedPieces } from '../hooks/useSavedPieces.ts'
+import { Mode } from '../types.ts'
 
 import './Board.css'
 import { ColumnNumbers } from './ColumnNumbers.tsx'
@@ -25,31 +26,6 @@ import PieceStand from './PieceStand.tsx'
 import { RowNumbers } from './RowNumbers.tsx'
 import Square from './Square.tsx'
 import Piece from './pieces/Piece.tsx'
-
-export type PieceKind =
-  | 'pawn'
-  | 'lance'
-  | 'knight'
-  | 'silver'
-  | 'gold'
-  | 'bishop'
-  | 'rook'
-  | 'king'
-
-type Place = 'board' | 'stand' | 'box'
-
-export type PieceData = {
-  id: string
-  kind: PieceKind
-  place: Place
-  row: number | null
-  col: number | null
-  promoted: boolean
-  opposite: boolean
-  promotable: boolean
-}
-
-type Mode = 'edit' | 'solve'
 
 export const ModeContext = createContext<Mode>('edit')
 
