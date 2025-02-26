@@ -1,16 +1,7 @@
 import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
 import { createContext, useState } from 'react'
-import {
-  FaAngleDoubleLeft,
-  FaAngleDoubleRight,
-  FaAngleLeft,
-  FaAngleRight,
-  FaChessKing,
-  FaEdit,
-  FaEraser,
-  FaTrash,
-} from 'react-icons/fa'
+import { FaChessKing, FaEdit, FaEraser, FaTrash } from 'react-icons/fa'
 
 import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { useMovePiece } from '../hooks/useMovePiece.ts'
@@ -25,6 +16,7 @@ import PieceBox from './PieceBox.tsx'
 import PieceStand from './PieceStand.tsx'
 import { RowNumbers } from './RowNumbers.tsx'
 import Square from './Square.tsx'
+import { StepButtonGroup } from './StepButtonGroup.tsx'
 import Piece from './pieces/Piece.tsx'
 
 export const ModeContext = createContext<Mode>('edit')
@@ -182,36 +174,14 @@ export default function Board() {
                       <FaEdit /> 盤面を編集する
                     </button>
                     <span className="current-move">{currentMove} 手目</span>
-                    <div className="step-buttons">
-                      <button
-                        className="step-button"
-                        onClick={firstStepBack}
-                        disabled={isFirstMove()}
-                      >
-                        <FaAngleDoubleLeft />
-                      </button>
-                      <button
-                        className="step-button"
-                        onClick={stepBack}
-                        disabled={isFirstMove()}
-                      >
-                        <FaAngleLeft />
-                      </button>
-                      <button
-                        className="step-button"
-                        onClick={stepForward}
-                        disabled={isLastMove()}
-                      >
-                        <FaAngleRight />
-                      </button>
-                      <button
-                        className="step-button"
-                        onClick={lastStepForward}
-                        disabled={isLastMove()}
-                      >
-                        <FaAngleDoubleRight />
-                      </button>
-                    </div>
+                    <StepButtonGroup
+                      firstStepBack={firstStepBack}
+                      stepBack={stepBack}
+                      stepForward={stepForward}
+                      lastStepForward={lastStepForward}
+                      isFirstMove={isFirstMove}
+                      isLastMove={isLastMove}
+                    />
                   </>
                 )}
               </div>

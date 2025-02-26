@@ -1,0 +1,14 @@
+.step-buttons {
+  display: flex;
+  gap: 5px;
+}
+
+.step-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 40px;
+  font-size: large;
+  font-weight: bold;
+}
