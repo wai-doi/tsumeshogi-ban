@@ -1,15 +1,18 @@
-import PawnImage from './PawnImage'
-import LanceImage from './LanceImage'
-import KnightImage from './KnightImage'
-import SilverImage from './SilverImage'
-import GoldImage from './GoldImage'
-import BishopImage from './BishopImage'
-import RookImage from './RookImage'
-import KingImage from './KingImage'
-import './Piece.css'
-import { useContext } from 'react'
 import { useDraggable } from '@dnd-kit/core'
-import { PieceData, ModeContext } from '../Board'
+import { useContext } from 'react'
+
+import type { PieceData } from '../../types.ts'
+import { ModeContext } from '../Board.tsx'
+
+import BishopImage from './BishopImage.tsx'
+import GoldImage from './GoldImage.tsx'
+import KingImage from './KingImage.tsx'
+import KnightImage from './KnightImage.tsx'
+import LanceImage from './LanceImage.tsx'
+import PawnImage from './PawnImage.tsx'
+import './Piece.css'
+import RookImage from './RookImage.tsx'
+import SilverImage from './SilverImage.tsx'
 
 export default function Piece({
   piece,

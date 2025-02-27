@@ -1,6 +1,7 @@
+import { FaGithub, FaQuestionCircle } from 'react-icons/fa'
+
 import './App.css'
 import Board from './components/Board.tsx'
-import { FaGithub, FaQuestionCircle } from 'react-icons/fa'
 
 function App() {
   return (
