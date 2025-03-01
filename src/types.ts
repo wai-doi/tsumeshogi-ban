@@ -22,3 +22,5 @@ export type PieceData = {
 }
 
 export type Mode = 'edit' | 'solve'
+
+export type FlipPieceType = (event: React.MouseEvent, pieceId: string) => void

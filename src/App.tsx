@@ -1,7 +1,7 @@
 import { FaGithub, FaQuestionCircle } from 'react-icons/fa'
 
 import './App.css'
-import { Board } from './components/Board.tsx'
+import { Game } from './components/Game.tsx'
 
 function App(): JSX.Element {
   return (
@@ -17,7 +17,7 @@ function App(): JSX.Element {
           </a>
         </div>
       </div>
-      <Board />
+      <Game />
     </>
   )
 }

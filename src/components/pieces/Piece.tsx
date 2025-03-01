@@ -2,7 +2,7 @@ import { useDraggable } from '@dnd-kit/core'
 import { useContext } from 'react'
 
 import type { PieceData } from '../../types.ts'
-import { ModeContext } from '../Board.tsx'
+import { ModeContext } from '../Game.tsx'
 
 import { BishopImage } from './BishopImage.tsx'
 import { GoldImage } from './GoldImage.tsx'

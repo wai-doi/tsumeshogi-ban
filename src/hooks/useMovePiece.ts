@@ -1,10 +1,10 @@
 import type { DragEndEvent } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
 
-import type { Mode, PieceData } from '../types.ts'
+import type { FlipPieceType, Mode, PieceData } from '../types.ts'
 
 type UseMovePieceReturn = {
-  flipPiece: (event: React.MouseEvent, pieceId: string) => void
+  flipPiece: FlipPieceType
   dropPiece: (event: DragEndEvent) => void
 }
 
