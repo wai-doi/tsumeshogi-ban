@@ -12,16 +12,16 @@ import { Mode } from '../types.ts'
 import './Board.css'
 import { ColumnNumbers } from './ColumnNumbers.tsx'
 import { ModeButton } from './ModeButton.tsx'
-import PieceBox from './PieceBox.tsx'
-import PieceStand from './PieceStand.tsx'
+import { PieceBox } from './PieceBox.tsx'
+import { PieceStand } from './PieceStand.tsx'
 import { RowNumbers } from './RowNumbers.tsx'
-import Square from './Square.tsx'
+import { Square } from './Square.tsx'
 import { StepButtonGroup } from './StepButtonGroup.tsx'
-import Piece from './pieces/Piece.tsx'
+import { Piece } from './pieces/Piece.tsx'
 
 export const ModeContext = createContext<Mode>('edit')
 
-export default function Board(): JSX.Element {
+export function Board(): JSX.Element {
   const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()
   const { currentPieces, setCurrentPieces, clearCurrentPieces } =
     useCurrentPieces(savedPieces)

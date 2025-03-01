@@ -4,15 +4,15 @@ import { useContext } from 'react'
 import type { PieceData } from '../../types.ts'
 import { ModeContext } from '../Board.tsx'
 
-import BishopImage from './BishopImage.tsx'
-import GoldImage from './GoldImage.tsx'
-import KingImage from './KingImage.tsx'
-import KnightImage from './KnightImage.tsx'
-import LanceImage from './LanceImage.tsx'
-import PawnImage from './PawnImage.tsx'
+import { BishopImage } from './BishopImage.tsx'
+import { GoldImage } from './GoldImage.tsx'
+import { KingImage } from './KingImage.tsx'
+import { KnightImage } from './KnightImage.tsx'
+import { LanceImage } from './LanceImage.tsx'
+import { PawnImage } from './PawnImage.tsx'
 import './Piece.css'
-import RookImage from './RookImage.tsx'
-import SilverImage from './SilverImage.tsx'
+import { RookImage } from './RookImage.tsx'
+import { SilverImage } from './SilverImage.tsx'
 
 type getImageSetReturn =
   | {
@@ -28,7 +28,7 @@ type getImageSetReturn =
       oppositePromoted: undefined
     }
 
-export default function Piece({
+export function Piece({
   piece,
   onRightOrDoubleClick,
 }: {

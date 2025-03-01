@@ -1,7 +1,7 @@
 import { FaGithub, FaQuestionCircle } from 'react-icons/fa'
 
 import './App.css'
-import Board from './components/Board.tsx'
+import { Board } from './components/Board.tsx'
 
 function App(): JSX.Element {
   return (
@@ -22,4 +22,5 @@ function App(): JSX.Element {
   )
 }
 
+// eslint-disable-next-line import/no-default-export
 export default App

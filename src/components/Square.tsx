@@ -2,7 +2,7 @@ import { useDroppable } from '@dnd-kit/core'
 
 import './Square.css'
 
-export default function Square({
+export function Square({
   row,
   col,
   children,
