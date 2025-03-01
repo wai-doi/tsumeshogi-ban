@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import type { PieceData } from '../types.ts'
 
-type UseSavedPiecesReturn = {
+interface UseSavedPiecesReturn {
   savedPieces: PieceData[] | null
   savePieces: (pieces: PieceData[]) => void
   deleteSavedPieces: () => void

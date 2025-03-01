@@ -3,7 +3,7 @@ import { isEqual } from 'lodash'
 
 import type { FlipPieceType, Mode, PieceData } from '../types.ts'
 
-type UseMovePieceReturn = {
+interface UseMovePieceReturn {
   flipPiece: FlipPieceType
   dropPiece: (event: DragEndEvent) => void
 }

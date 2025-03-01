@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import type { PieceData, PieceKind } from '../types.ts'
 
-type UseCurrentPiecesReturn = {
+interface UseCurrentPiecesReturn {
   currentPieces: PieceData[]
   setCurrentPieces: React.Dispatch<React.SetStateAction<PieceData[]>>
   clearCurrentPieces: () => void

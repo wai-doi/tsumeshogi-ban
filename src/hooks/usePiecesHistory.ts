@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 import type { PieceData } from '../types.ts'
 
-type UsePiecesHistoryReturn = {
+interface UsePiecesHistoryReturn {
   currentMove: number
   initializePiecesHistory: () => void
   savePiecesHistory: (nextPieces: PieceData[]) => void

@@ -10,7 +10,7 @@ export type PieceKind =
 
 type Place = 'board' | 'stand' | 'box'
 
-export type PieceData = {
+export interface PieceData {
   id: string
   kind: PieceKind
   place: Place
@@ -23,4 +23,6 @@ export type PieceData = {
 
 export type Mode = 'edit' | 'solve'
 
-export type FlipPieceType = (event: React.MouseEvent, pieceId: string) => void
+export interface FlipPieceType {
+  (event: React.MouseEvent, pieceId: string): void
+}

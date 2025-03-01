@@ -7,7 +7,7 @@ import {
 
 import './StepButtonGroup.css'
 
-type StepButtonGroupProps = {
+interface StepButtonGroupProps {
   firstStepBack: () => void
   stepBack: () => void
   stepForward: () => void

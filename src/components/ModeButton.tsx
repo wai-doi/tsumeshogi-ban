@@ -1,6 +1,6 @@
 import './ModeButton.css'
 
-type ModeButtonProps = {
+interface ModeButtonProps {
   children: React.ReactNode
   isActive: boolean
   handleOnClick: React.MouseEventHandler<HTMLButtonElement>
