@@ -12,14 +12,15 @@ export function Board({
   flipPiece: FlipPieceType
 }): JSX.Element {
   const piecesOnBoard = currentPieces.filter((piece) => piece.place === 'board')
+  const positionMap = new Map<string, PieceData>(
+    piecesOnBoard.map((piece) => [`${piece.row}-${piece.col}`, piece]),
+  )
 
   function renderRow(row: number): JSX.Element {
     return (
       <div key={row} className="row">
         {[...Array(9)].map((_, col) => {
-          const piece = piecesOnBoard.find(
-            (piece) => piece.row === row && piece.col === col,
-          )
+          const piece = positionMap.get(`${row}-${col}`)
           return (
             <Square key={col} row={row} col={col}>
               {piece ? (
