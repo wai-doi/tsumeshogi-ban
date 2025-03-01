@@ -4,13 +4,12 @@ import './Board.css'
 import { Square } from './Square.tsx'
 import { Piece } from './pieces/Piece.tsx'
 
-export function Board({
-  currentPieces,
-  flipPiece,
-}: {
+interface BoardProps {
   currentPieces: PieceData[]
   flipPiece: FlipPieceType
-}): JSX.Element {
+}
+
+export function Board({ currentPieces, flipPiece }: BoardProps): JSX.Element {
   const piecesOnBoard = currentPieces.filter((piece) => piece.place === 'board')
   const positionMap = new Map<string, PieceData>(
     piecesOnBoard.map((piece) => [`${piece.row}-${piece.col}`, piece]),

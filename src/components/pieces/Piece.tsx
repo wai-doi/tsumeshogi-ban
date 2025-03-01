@@ -1,7 +1,7 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useContext } from 'react'
 
-import type { PieceData } from '../../types.ts'
+import type { FlipPieceType, PieceData } from '../../types.ts'
 import { ModeContext } from '../Game.tsx'
 
 import { BishopImage } from './BishopImage.tsx'
@@ -28,13 +28,15 @@ type getImageSetReturn =
       oppositePromoted: undefined
     }
 
+interface PieceProps {
+  piece: PieceData
+  onRightOrDoubleClick?: FlipPieceType
+}
+
 export function Piece({
   piece,
   onRightOrDoubleClick,
-}: {
-  piece: PieceData
-  onRightOrDoubleClick?: (event: React.MouseEvent, pieceID: string) => void
-}): JSX.Element {
+}: PieceProps): JSX.Element {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: piece.id,

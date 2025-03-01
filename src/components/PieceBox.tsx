@@ -5,7 +5,11 @@ import { PieceData, PieceKind } from '../types.ts'
 import './PieceBox.css'
 import { Piece } from './pieces/Piece.tsx'
 
-export function PieceBox({ pieces }: { pieces: PieceData[] }): JSX.Element {
+interface PieceBoxProps {
+  pieces: PieceData[]
+}
+
+export function PieceBox({ pieces }: PieceBoxProps): JSX.Element {
   const { setNodeRef } = useDroppable({
     id: 'piece-box',
   })
