@@ -23,12 +23,12 @@ export function Board({
           const piece = positionMap.get(`${row}-${col}`)
           return (
             <Square key={col} row={row} col={col}>
-              {piece ? (
+              {piece && (
                 <Piece
                   piece={piece}
                   onRightOrDoubleClick={(e) => flipPiece(e, piece.id)}
                 />
-              ) : null}
+              )}
             </Square>
           )
         })}
