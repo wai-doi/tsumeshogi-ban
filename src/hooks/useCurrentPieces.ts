@@ -2,7 +2,15 @@ import { useState } from 'react'
 
 import type { PieceData, PieceKind } from '../types.ts'
 
-export function useCurrentPieces(savedPieces: PieceData[] | null) {
+type UseCurrentPiecesReturn = {
+  currentPieces: PieceData[]
+  setCurrentPieces: React.Dispatch<React.SetStateAction<PieceData[]>>
+  clearCurrentPieces: () => void
+}
+
+export function useCurrentPieces(
+  savedPieces: PieceData[] | null,
+): UseCurrentPiecesReturn {
   const [currentPieces, setCurrentPieces] = useState<PieceData[]>(
     savedPieces || generatePieces(),
   )
@@ -41,7 +49,7 @@ export function useCurrentPieces(savedPieces: PieceData[] | null) {
       .flat()
   }
 
-  function clearCurrentPieces() {
+  function clearCurrentPieces(): void {
     setCurrentPieces(generatePieces())
   }
 

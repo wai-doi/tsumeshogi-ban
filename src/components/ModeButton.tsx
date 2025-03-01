@@ -10,7 +10,7 @@ export function ModeButton({
   children,
   isActive,
   handleOnClick,
-}: ModeButtonProps) {
+}: ModeButtonProps): JSX.Element {
   return (
     <button
       className={'mode-button ' + (isActive ? 'active-mode' : 'inactive-mode')}

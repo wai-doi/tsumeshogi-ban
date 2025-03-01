@@ -5,12 +5,19 @@ import { PieceData, PieceKind } from '../types.ts'
 import './PieceBox.css'
 import Piece from './pieces/Piece.tsx'
 
-export default function PieceBox({ pieces }: { pieces: PieceData[] }) {
+export default function PieceBox({
+  pieces,
+}: {
+  pieces: PieceData[]
+}): JSX.Element {
   const { setNodeRef } = useDroppable({
     id: 'piece-box',
   })
 
-  function groupedPieces() {
+  function groupedPieces(): {
+    kind: PieceKind
+    pieceArray: PieceData[]
+  }[] {
     const groupedPieces: { kind: PieceKind; pieceArray: PieceData[] }[] = []
     pieces.forEach((piece) => {
       const pieceArray = groupedPieces.find(

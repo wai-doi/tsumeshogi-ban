@@ -3,17 +3,22 @@ import { isEqual } from 'lodash'
 
 import type { Mode, PieceData } from '../types.ts'
 
+type UseMovePieceReturn = {
+  flipPiece: (event: React.MouseEvent, pieceId: string) => void
+  dropPiece: (event: DragEndEvent) => void
+}
+
 export function useMovePiece(
   mode: Mode,
   currentPieces: PieceData[],
   setCurrentPieces: React.Dispatch<React.SetStateAction<PieceData[]>>,
   currentMove: number,
   savePiecesHistory: (nextPieces: PieceData[]) => void,
-) {
+): UseMovePieceReturn {
   const isEditing = mode === 'edit'
   const isSolving = mode === 'solve'
 
-  function flipPiece(event: React.MouseEvent, pieceId: string) {
+  function flipPiece(event: React.MouseEvent, pieceId: string): void {
     event.preventDefault()
     const nextPieces = structuredClone(currentPieces)
     const piece = nextPieces.find((p) => p.id === pieceId)
@@ -54,7 +59,7 @@ export function useMovePiece(
     if (isSolving) savePiecesHistory(nextPieces)
   }
 
-  function dropPiece(event: DragEndEvent) {
+  function dropPiece(event: DragEndEvent): void {
     if (!event.over) return
 
     const nextPieces = structuredClone(currentPieces)

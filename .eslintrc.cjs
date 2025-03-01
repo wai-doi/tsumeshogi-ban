@@ -27,5 +27,6 @@ module.exports = {
         warnOnUnassignedImports: true,
       },
     ],
+    '@typescript-eslint/explicit-function-return-type': 'error',
   },
 }

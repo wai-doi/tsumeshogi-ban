@@ -14,13 +14,27 @@ import './Piece.css'
 import RookImage from './RookImage.tsx'
 import SilverImage from './SilverImage.tsx'
 
+type getImageSetReturn =
+  | {
+      normal: string
+      promoted: string
+      opposite: string
+      oppositePromoted: string
+    }
+  | {
+      normal: string
+      promoted: undefined
+      opposite: string
+      oppositePromoted: undefined
+    }
+
 export default function Piece({
   piece,
   onRightOrDoubleClick,
 }: {
   piece: PieceData
   onRightOrDoubleClick?: (event: React.MouseEvent, pieceID: string) => void
-}) {
+}): JSX.Element {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: piece.id,
@@ -36,7 +50,7 @@ export default function Piece({
     cursor: isDragging ? 'grabbing' : 'grab',
   }
 
-  const getImageSet = () => {
+  const getImageSet = (): getImageSetReturn => {
     switch (piece.kind) {
       case 'pawn':
         return PawnImage
@@ -65,7 +79,7 @@ export default function Piece({
     }
   }
 
-  const imagePath = () => {
+  const imagePath = (): string | undefined => {
     const imageSet = getImageSet()!
 
     // 解答モードで駒箱からドラッグするとき相手の駒にする

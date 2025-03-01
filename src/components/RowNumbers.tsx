@@ -1,6 +1,6 @@
 import './RowNumbers.css'
 
-export function RowNumbers() {
+export function RowNumbers(): JSX.Element {
   return (
     <div className="row-numbers">
       {'一二三四五六七八九'.split('').map((num) => (

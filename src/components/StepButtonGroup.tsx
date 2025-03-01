@@ -23,7 +23,7 @@ export function StepButtonGroup({
   lastStepForward,
   isFirstMove,
   isLastMove,
-}: StepButtonGroupProps) {
+}: StepButtonGroupProps): JSX.Element {
   return (
     <div className="step-buttons">
       <button

@@ -3,7 +3,7 @@ import { FaGithub, FaQuestionCircle } from 'react-icons/fa'
 import './App.css'
 import Board from './components/Board.tsx'
 
-function App() {
+function App(): JSX.Element {
   return (
     <>
       <div className="title-container">

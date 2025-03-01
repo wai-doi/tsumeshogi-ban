@@ -21,7 +21,7 @@ import Piece from './pieces/Piece.tsx'
 
 export const ModeContext = createContext<Mode>('edit')
 
-export default function Board() {
+export default function Board(): JSX.Element {
   const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()
   const { currentPieces, setCurrentPieces, clearCurrentPieces } =
     useCurrentPieces(savedPieces)
@@ -63,11 +63,11 @@ export default function Board() {
     (piece) => piece.place === 'box' && !(isSolving && piece.kind === 'king'),
   )
 
-  function renderBoard() {
+  function renderBoard(): JSX.Element {
     return <>{[...Array(9)].map((_, row) => renderRow(row))}</>
   }
 
-  function renderRow(row: number) {
+  function renderRow(row: number): JSX.Element {
     return (
       <div key={row} className="row">
         {[...Array(9)].map((_, col) => {
@@ -89,7 +89,7 @@ export default function Board() {
     )
   }
 
-  function handleSaveBoard() {
+  function handleSaveBoard(): void {
     if (isSolving) return
 
     // 保存している盤面と同じであれば、確認ダイアログは表示しない
@@ -103,7 +103,7 @@ export default function Board() {
     }
   }
 
-  function handleDeleteSavedBoard() {
+  function handleDeleteSavedBoard(): void {
     if (!savedPieces) return
 
     if (confirm('保存した配置を消しますか？')) {
@@ -111,13 +111,13 @@ export default function Board() {
     }
   }
 
-  function handleClearBoard() {
+  function handleClearBoard(): void {
     if (confirm('配置をクリアしますか？')) {
       clearCurrentPieces()
     }
   }
 
-  function handleSwitchToEdit() {
+  function handleSwitchToEdit(): void {
     if (isEditing) return
 
     setMode('edit')

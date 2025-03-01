@@ -1,6 +1,6 @@
 import './ColumnNumbers.css'
 
-export function ColumnNumbers() {
+export function ColumnNumbers(): JSX.Element {
   return (
     <div className="column-numbers">
       {'987654321'.split('').map((num) => (

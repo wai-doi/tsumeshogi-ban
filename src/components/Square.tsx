@@ -10,7 +10,7 @@ export default function Square({
   row: number
   col: number
   children: React.ReactNode
-}) {
+}): JSX.Element {
   const { isOver, setNodeRef } = useDroppable({
     id: `square-${row}-${col}`,
     data: { row: row, col: col },
