@@ -1,7 +1,7 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useContext } from 'react'
 
-import type { FlipPieceType, PieceData } from '../../types.ts'
+import type { PieceData, PieceFlipHandler } from '../../types.ts'
 import { ModeContext } from '../Game.tsx'
 
 import { BishopImage } from './BishopImage.tsx'
@@ -14,7 +14,7 @@ import './Piece.css'
 import { RookImage } from './RookImage.tsx'
 import { SilverImage } from './SilverImage.tsx'
 
-type getImageSetReturn =
+type GetImageSetReturn =
   | {
       normal: string
       promoted: string
@@ -30,7 +30,7 @@ type getImageSetReturn =
 
 interface PieceProps {
   piece: PieceData
-  onRightOrDoubleClick?: FlipPieceType
+  onRightOrDoubleClick?: PieceFlipHandler
 }
 
 export function Piece({
@@ -52,7 +52,7 @@ export function Piece({
     cursor: isDragging ? 'grabbing' : 'grab',
   }
 
-  const getImageSet = (): getImageSetReturn => {
+  const getImageSet = (): GetImageSetReturn => {
     switch (piece.kind) {
       case 'pawn':
         return PawnImage

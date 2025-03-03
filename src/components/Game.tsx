@@ -30,10 +30,10 @@ export function Game(): JSX.Element {
     currentMove,
     initializePiecesHistory,
     savePiecesHistory,
-    firstStepBack,
-    stepBack,
-    stepForward,
-    lastStepForward,
+    handleFirstStepBack,
+    handleStepBack,
+    handleStepForward,
+    handleLastStepForward,
     isFirstMove,
     isLastMove,
   } = usePiecesHistory(currentPieces, setCurrentPieces)
@@ -61,7 +61,7 @@ export function Game(): JSX.Element {
     (piece) => piece.place === 'box' && !(isSolving && piece.kind === 'king'),
   )
 
-  function handleSaveBoard(): void {
+  function handleSwitchToSolve(): void {
     if (isSolving) return
 
     // 保存している盤面と同じであれば、確認ダイアログは表示しない
@@ -100,10 +100,10 @@ export function Game(): JSX.Element {
     <>
       <ModeContext.Provider value={mode}>
         <div className="mode-button-container">
-          <ModeButton isActive={isEditing} handleOnClick={handleSwitchToEdit}>
+          <ModeButton isActive={isEditing} onModeSwitch={handleSwitchToEdit}>
             <FaEdit /> 編集モード
           </ModeButton>
-          <ModeButton isActive={isSolving} handleOnClick={handleSaveBoard}>
+          <ModeButton isActive={isSolving} onModeSwitch={handleSwitchToSolve}>
             <FaChessKing /> 解答モード
           </ModeButton>
         </div>
@@ -112,7 +112,7 @@ export function Game(): JSX.Element {
             <div className="board-and-row-numbers">
               <div>
                 <ColumnNumbers />
-                <Board currentPieces={currentPieces} flipPiece={flipPiece} />
+                <Board currentPieces={currentPieces} onPieceFlip={flipPiece} />
               </div>
               <RowNumbers />
             </div>
@@ -122,7 +122,7 @@ export function Game(): JSX.Element {
                   <>
                     <button
                       className="button switch-mode-button"
-                      onClick={handleSaveBoard}
+                      onClick={handleSwitchToSolve}
                     >
                       <FaChessKing /> 保存して解答する
                     </button>
@@ -148,10 +148,10 @@ export function Game(): JSX.Element {
                     </button>
                     <span className="current-move">{currentMove} 手目</span>
                     <StepButtonGroup
-                      firstStepBack={firstStepBack}
-                      stepBack={stepBack}
-                      stepForward={stepForward}
-                      lastStepForward={lastStepForward}
+                      onFirstStepBack={handleFirstStepBack}
+                      onStepBack={handleStepBack}
+                      onStepForward={handleStepForward}
+                      onLastStepForward={handleLastStepForward}
                       isFirstMove={isFirstMove}
                       isLastMove={isLastMove}
                     />

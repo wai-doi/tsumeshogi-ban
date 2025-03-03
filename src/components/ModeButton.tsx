@@ -3,18 +3,18 @@ import './ModeButton.css'
 interface ModeButtonProps {
   children: React.ReactNode
   isActive: boolean
-  handleOnClick: React.MouseEventHandler<HTMLButtonElement>
+  onModeSwitch: React.MouseEventHandler<HTMLButtonElement>
 }
 
 export function ModeButton({
   children,
   isActive,
-  handleOnClick,
+  onModeSwitch,
 }: ModeButtonProps): JSX.Element {
   return (
     <button
       className={'mode-button ' + (isActive ? 'active-mode' : 'inactive-mode')}
-      onClick={handleOnClick}
+      onClick={onModeSwitch}
     >
       {children}
     </button>

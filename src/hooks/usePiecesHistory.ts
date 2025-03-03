@@ -6,10 +6,10 @@ interface UsePiecesHistoryReturn {
   currentMove: number
   initializePiecesHistory: () => void
   savePiecesHistory: (nextPieces: PieceData[]) => void
-  firstStepBack: () => void
-  stepBack: () => void
-  stepForward: () => void
-  lastStepForward: () => void
+  handleFirstStepBack: () => void
+  handleStepBack: () => void
+  handleStepForward: () => void
+  handleLastStepForward: () => void
   isFirstMove: () => boolean
   isLastMove: () => boolean
 }
@@ -35,28 +35,28 @@ export function usePiecesHistory(
     setCurrentMove(nextHistory.length - 1)
   }
 
-  function firstStepBack(): void {
+  function handleFirstStepBack(): void {
     if (currentMove === 0) return
     const nextCurrentMove = 0
     setCurrentMove(nextCurrentMove)
     setCurrentPieces(history[nextCurrentMove])
   }
 
-  function stepBack(): void {
+  function handleStepBack(): void {
     if (currentMove === 0) return
     const nextCurrentMove = currentMove - 1
     setCurrentMove(nextCurrentMove)
     setCurrentPieces(history[nextCurrentMove])
   }
 
-  function stepForward(): void {
+  function handleStepForward(): void {
     if (currentMove === history.length - 1) return
     const nextCurrentMove = currentMove + 1
     setCurrentMove(nextCurrentMove)
     setCurrentPieces(history[nextCurrentMove])
   }
 
-  function lastStepForward(): void {
+  function handleLastStepForward(): void {
     if (currentMove === history.length - 1) return
     const nextCurrentMove = history.length - 1
     setCurrentMove(nextCurrentMove)
@@ -75,10 +75,10 @@ export function usePiecesHistory(
     currentMove,
     initializePiecesHistory,
     savePiecesHistory,
-    firstStepBack,
-    stepBack,
-    stepForward,
-    lastStepForward,
+    handleFirstStepBack,
+    handleStepBack,
+    handleStepForward,
+    handleLastStepForward,
     isFirstMove,
     isLastMove,
   }

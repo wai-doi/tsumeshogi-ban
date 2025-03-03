@@ -23,6 +23,6 @@ export interface PieceData {
 
 export type Mode = 'edit' | 'solve'
 
-export interface FlipPieceType {
+export interface PieceFlipHandler {
   (event: React.MouseEvent, pieceId: string): void
 }

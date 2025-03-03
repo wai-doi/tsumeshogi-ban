@@ -8,19 +8,19 @@ import {
 import './StepButtonGroup.css'
 
 interface StepButtonGroupProps {
-  firstStepBack: () => void
-  stepBack: () => void
-  stepForward: () => void
-  lastStepForward: () => void
+  onFirstStepBack: () => void
+  onStepBack: () => void
+  onStepForward: () => void
+  onLastStepForward: () => void
   isFirstMove: () => boolean
   isLastMove: () => boolean
 }
 
 export function StepButtonGroup({
-  firstStepBack,
-  stepBack,
-  stepForward,
-  lastStepForward,
+  onFirstStepBack,
+  onStepBack,
+  onStepForward,
+  onLastStepForward,
   isFirstMove,
   isLastMove,
 }: StepButtonGroupProps): JSX.Element {
@@ -28,28 +28,28 @@ export function StepButtonGroup({
     <div className="step-buttons">
       <button
         className="step-button"
-        onClick={firstStepBack}
+        onClick={onFirstStepBack}
         disabled={isFirstMove()}
       >
         <FaAngleDoubleLeft />
       </button>
       <button
         className="step-button"
-        onClick={stepBack}
+        onClick={onStepBack}
         disabled={isFirstMove()}
       >
         <FaAngleLeft />
       </button>
       <button
         className="step-button"
-        onClick={stepForward}
+        onClick={onStepForward}
         disabled={isLastMove()}
       >
         <FaAngleRight />
       </button>
       <button
         className="step-button"
-        onClick={lastStepForward}
+        onClick={onLastStepForward}
         disabled={isLastMove()}
       >
         <FaAngleDoubleRight />

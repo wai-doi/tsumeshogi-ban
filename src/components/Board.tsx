@@ -1,4 +1,4 @@
-import { FlipPieceType, PieceData } from '../types.ts'
+import { PieceData, PieceFlipHandler } from '../types.ts'
 
 import './Board.css'
 import { Square } from './Square.tsx'
@@ -6,10 +6,10 @@ import { Piece } from './pieces/Piece.tsx'
 
 interface BoardProps {
   currentPieces: PieceData[]
-  flipPiece: FlipPieceType
+  onPieceFlip: PieceFlipHandler
 }
 
-export function Board({ currentPieces, flipPiece }: BoardProps): JSX.Element {
+export function Board({ currentPieces, onPieceFlip }: BoardProps): JSX.Element {
   const piecesOnBoard = currentPieces.filter((piece) => piece.place === 'board')
   const positionMap = new Map<string, PieceData>(
     piecesOnBoard.map((piece) => [`${piece.row}-${piece.col}`, piece]),
@@ -25,7 +25,7 @@ export function Board({ currentPieces, flipPiece }: BoardProps): JSX.Element {
               {piece && (
                 <Piece
                   piece={piece}
-                  onRightOrDoubleClick={(e) => flipPiece(e, piece.id)}
+                  onRightOrDoubleClick={(e) => onPieceFlip(e, piece.id)}
                 />
               )}
             </Square>
