@@ -7,7 +7,7 @@ import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { useMovePiece } from '../hooks/useMovePiece.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
 import { useSavedPieces } from '../hooks/useSavedPieces.ts'
-import { Mode } from '../types.ts'
+import type { Mode } from '../types.ts'
 
 import { Board } from './Board.tsx'
 import { ColumnNumbers } from './ColumnNumbers.tsx'

@@ -1,6 +1,6 @@
 import { useDroppable } from '@dnd-kit/core'
 
-import { PieceData, PieceKind } from '../types.ts'
+import type { PieceData, PieceKind } from '../types.ts'
 
 import './PieceBox.css'
 import { Piece } from './pieces/Piece.tsx'

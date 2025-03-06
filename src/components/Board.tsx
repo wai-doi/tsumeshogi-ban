@@ -1,4 +1,4 @@
-import { PieceData, PieceFlipHandler } from '../types.ts'
+import type { PieceData, PieceFlipHandler } from '../types.ts'
 
 import './Board.css'
 import { Square } from './Square.tsx'
