@@ -1,7 +1,7 @@
-import type { DragEndEvent } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
 
 import type { Mode, PieceData, PieceFlipHandler } from '../types.ts'
+import type { DragEndEvent } from '@dnd-kit/core'
 
 interface UseMovePieceReturn {
   flipPiece: PieceFlipHandler

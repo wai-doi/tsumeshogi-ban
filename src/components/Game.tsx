@@ -7,7 +7,6 @@ import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { useMovePiece } from '../hooks/useMovePiece.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
 import { useSavedPieces } from '../hooks/useSavedPieces.ts'
-import type { Mode } from '../types.ts'
 
 import { Board } from './Board.tsx'
 import { ColumnNumbers } from './ColumnNumbers.tsx'
@@ -17,6 +16,8 @@ import { PieceBox } from './PieceBox.tsx'
 import { PieceStand } from './PieceStand.tsx'
 import { RowNumbers } from './RowNumbers.tsx'
 import { StepButtonGroup } from './StepButtonGroup.tsx'
+
+import type { Mode } from '../types.ts'
 
 export const ModeContext = createContext<Mode>('edit')
 

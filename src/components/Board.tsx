@@ -1,9 +1,8 @@
-import type { PieceData, PieceFlipHandler } from '../types.ts'
-
 import './Board.css'
 import { Square } from './Square.tsx'
 import { Piece } from './pieces/Piece.tsx'
 
+import type { PieceData, PieceFlipHandler } from '../types.ts'
 interface BoardProps {
   currentPieces: PieceData[]
   onPieceFlip: PieceFlipHandler

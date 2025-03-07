@@ -19,6 +19,17 @@ module.exports = {
     'import/order': [
       'error',
       {
+        groups: [
+          'builtin',
+          'external',
+          'internal',
+          'unknown',
+          'parent',
+          'sibling',
+          'index',
+          'object',
+          'type',
+        ],
         named: true,
         alphabetize: {
           order: 'asc',

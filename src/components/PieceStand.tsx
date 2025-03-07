@@ -1,9 +1,9 @@
 import { useDroppable } from '@dnd-kit/core'
 
-import type { PieceData } from '../types.ts'
-
 import './PieceStand.css'
 import { Piece } from './pieces/Piece.tsx'
+
+import type { PieceData } from '../types.ts'
 
 interface PieceStandProps {
   pieces: PieceData[]

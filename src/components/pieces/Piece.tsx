@@ -1,7 +1,6 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useContext } from 'react'
 
-import type { PieceData, PieceFlipHandler } from '../../types.ts'
 import { ModeContext } from '../Game.tsx'
 
 import { BishopImage } from './BishopImage.tsx'
@@ -13,6 +12,8 @@ import { PawnImage } from './PawnImage.tsx'
 import './Piece.css'
 import { RookImage } from './RookImage.tsx'
 import { SilverImage } from './SilverImage.tsx'
+
+import type { PieceData, PieceFlipHandler } from '../../types.ts'
 
 type GetImageSetReturn =
   | {
