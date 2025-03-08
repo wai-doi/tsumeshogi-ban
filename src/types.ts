@@ -21,6 +21,13 @@ export interface PieceData {
   promotable: boolean
 }
 
+export interface PieceImage {
+  normal: string
+  promoted: string | undefined
+  opposite: string
+  oppositePromoted: string | undefined
+}
+
 export type Mode = 'edit' | 'solve'
 
 export interface PieceFlipHandler {

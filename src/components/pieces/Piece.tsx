@@ -13,21 +13,7 @@ import './Piece.css'
 import { RookImage } from './RookImage.tsx'
 import { SilverImage } from './SilverImage.tsx'
 
-import type { PieceData, PieceFlipHandler } from '../../types.ts'
-
-type GetImageSetReturn =
-  | {
-      normal: string
-      promoted: string
-      opposite: string
-      oppositePromoted: string
-    }
-  | {
-      normal: string
-      promoted: undefined
-      opposite: string
-      oppositePromoted: undefined
-    }
+import type { PieceData, PieceFlipHandler, PieceImage } from '../../types.ts'
 
 interface PieceProps {
   piece: PieceData
@@ -53,7 +39,7 @@ export function Piece({
     cursor: isDragging ? 'grabbing' : 'grab',
   }
 
-  const getImageSet = (): GetImageSetReturn => {
+  const getImageSet = (): PieceImage => {
     switch (piece.kind) {
       case 'pawn':
         return PawnImage

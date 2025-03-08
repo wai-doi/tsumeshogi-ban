@@ -3,7 +3,9 @@ import PromotedImage from '../../images/black_horse.png'
 import OppositeImage from '../../images/white_bishop.png'
 import OppositePromotedImage from '../../images/white_horse.png'
 
-export const BishopImage = {
+import type { PieceImage } from '../../types.ts'
+
+export const BishopImage: PieceImage = {
   normal: Image,
   promoted: PromotedImage,
   opposite: OppositeImage,
