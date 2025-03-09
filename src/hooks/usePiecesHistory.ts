@@ -6,6 +6,7 @@ interface UsePiecesHistoryReturn {
   currentMove: number
   initializePiecesHistory: () => void
   savePiecesHistory: (nextPieces: PieceData[]) => void
+  updateLastPieceHistory: (nextPieces: PieceData[]) => void
   handleFirstStepBack: () => void
   handleStepBack: () => void
   handleStepForward: () => void
@@ -33,6 +34,12 @@ export function usePiecesHistory(
     const nextHistory = [...history.slice(0, currentMove + 1), nextPieces]
     setHistory(nextHistory)
     setCurrentMove(nextHistory.length - 1)
+  }
+
+  function updateLastPieceHistory(nextPieces: PieceData[]): void {
+    // 末尾の盤面を上書きする
+    const nextHistory = [...history.slice(0, currentMove), nextPieces]
+    setHistory(nextHistory)
   }
 
   function handleFirstStepBack(): void {
@@ -74,6 +81,7 @@ export function usePiecesHistory(
   return {
     currentMove,
     initializePiecesHistory,
+    updateLastPieceHistory,
     savePiecesHistory,
     handleFirstStepBack,
     handleStepBack,

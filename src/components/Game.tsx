@@ -31,6 +31,7 @@ export function Game(): JSX.Element {
     currentMove,
     initializePiecesHistory,
     savePiecesHistory,
+    updateLastPieceHistory,
     handleFirstStepBack,
     handleStepBack,
     handleStepForward,
@@ -45,6 +46,7 @@ export function Game(): JSX.Element {
     setCurrentPieces,
     currentMove,
     savePiecesHistory,
+    updateLastPieceHistory,
   )
 
   const pointSensor = useSensor(PointerSensor, {

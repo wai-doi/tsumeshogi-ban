@@ -14,6 +14,7 @@ export function useMovePiece(
   setCurrentPieces: React.Dispatch<React.SetStateAction<PieceData[]>>,
   currentMove: number,
   savePiecesHistory: (nextPieces: PieceData[]) => void,
+  updateLastPieceHistory: (nextPieces: PieceData[]) => void,
 ): UseMovePieceReturn {
   const isEditing = mode === 'edit'
   const isSolving = mode === 'solve'
@@ -56,7 +57,7 @@ export function useMovePiece(
 
     setCurrentPieces(nextPieces)
 
-    if (isSolving) savePiecesHistory(nextPieces)
+    if (isSolving) updateLastPieceHistory(nextPieces)
   }
 
   function dropPiece(event: DragEndEvent): void {
