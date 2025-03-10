@@ -2,13 +2,28 @@ import './Board.css'
 import { Square } from './Square.tsx'
 import { Piece } from './pieces/Piece.tsx'
 
-import type { PieceData, PieceFlipHandler } from '../types.ts'
+import type {
+  NotPromoteHandler,
+  PieceData,
+  PieceFlipHandler,
+  PromoteHandler,
+  PromotePiece,
+} from '../types.ts'
 interface BoardProps {
   currentPieces: PieceData[]
   onPieceFlip: PieceFlipHandler
+  promotePiece: PromotePiece | null
+  onPromote: PromoteHandler
+  onNotPromote: NotPromoteHandler
 }
 
-export function Board({ currentPieces, onPieceFlip }: BoardProps): JSX.Element {
+export function Board({
+  currentPieces,
+  onPieceFlip,
+  promotePiece,
+  onPromote,
+  onNotPromote,
+}: BoardProps): JSX.Element {
   const piecesOnBoard = currentPieces.filter((piece) => piece.place === 'board')
   const positionMap = new Map<string, PieceData>(
     piecesOnBoard.map((piece) => [`${piece.row}-${piece.col}`, piece]),
@@ -18,9 +33,18 @@ export function Board({ currentPieces, onPieceFlip }: BoardProps): JSX.Element {
     return (
       <div key={row} className="row">
         {[...Array(9)].map((_, col) => {
+          const isPromotePiece =
+            promotePiece && row === promotePiece.row && col === promotePiece.col
           const piece = positionMap.get(`${row}-${col}`)
           return (
-            <Square key={col} row={row} col={col}>
+            <Square
+              key={col}
+              row={row}
+              col={col}
+              promotePiece={isPromotePiece ? promotePiece : null}
+              onPromote={onPromote}
+              onNotPromote={onNotPromote}
+            >
               {piece && (
                 <Piece
                   piece={piece}

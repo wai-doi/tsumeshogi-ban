@@ -6,6 +6,7 @@ import { FaChessKing, FaEdit, FaEraser, FaTrash } from 'react-icons/fa'
 import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { useMovePiece } from '../hooks/useMovePiece.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
+import { usePromotePiece } from '../hooks/usePromotePiece.ts'
 import { useSavedPieces } from '../hooks/useSavedPieces.ts'
 
 import { Board } from './Board.tsx'
@@ -17,7 +18,7 @@ import { PieceStand } from './PieceStand.tsx'
 import { RowNumbers } from './RowNumbers.tsx'
 import { StepButtonGroup } from './StepButtonGroup.tsx'
 
-import type { Mode } from '../types.ts'
+import type { Mode, PromotePiece } from '../types.ts'
 
 export const ModeContext = createContext<Mode>('edit')
 
@@ -26,6 +27,8 @@ export function Game(): JSX.Element {
   const { currentPieces, setCurrentPieces, clearCurrentPieces } =
     useCurrentPieces(savedPieces)
   const [mode, setMode] = useState<Mode>('edit')
+
+  const [promotePiece, setPromotePiece] = useState<PromotePiece | null>(null)
 
   const {
     currentMove,
@@ -38,14 +41,23 @@ export function Game(): JSX.Element {
     handleLastStepForward,
     isFirstMove,
     isLastMove,
-  } = usePiecesHistory(currentPieces, setCurrentPieces)
+  } = usePiecesHistory(currentPieces, setCurrentPieces, setPromotePiece)
 
-  const { flipPiece, dropPiece } = useMovePiece(
+  const { flipPiece, dragPieceStart, dropPiece } = useMovePiece(
     mode,
     currentPieces,
     setCurrentPieces,
     currentMove,
     savePiecesHistory,
+    updateLastPieceHistory,
+    setPromotePiece,
+  )
+
+  const { promote, notPromote } = usePromotePiece(
+    currentPieces,
+    setCurrentPieces,
+    promotePiece,
+    setPromotePiece,
     updateLastPieceHistory,
   )
 
@@ -97,6 +109,7 @@ export function Game(): JSX.Element {
 
     setMode('edit')
     setCurrentPieces(savedPieces!)
+    setPromotePiece(null)
   }
 
   return (
@@ -110,12 +123,22 @@ export function Game(): JSX.Element {
             <FaChessKing /> 解答モード
           </ModeButton>
         </div>
-        <DndContext onDragEnd={dropPiece} sensors={sensors}>
+        <DndContext
+          onDragStart={dragPieceStart}
+          onDragEnd={dropPiece}
+          sensors={sensors}
+        >
           <div className="board-container">
             <div className="board-and-row-numbers">
               <div>
                 <ColumnNumbers />
-                <Board currentPieces={currentPieces} onPieceFlip={flipPiece} />
+                <Board
+                  currentPieces={currentPieces}
+                  onPieceFlip={flipPiece}
+                  promotePiece={promotePiece}
+                  onPromote={promote}
+                  onNotPromote={notPromote}
+                />
               </div>
               <RowNumbers />
             </div>

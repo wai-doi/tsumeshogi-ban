@@ -30,6 +30,20 @@ export interface PieceImage {
 
 export type Mode = 'edit' | 'solve'
 
+export interface PromotePiece {
+  piece: PieceData
+  row: number
+  col: number
+}
+
 export interface PieceFlipHandler {
   (event: React.MouseEvent, pieceId: string): void
+}
+
+export interface PromoteHandler {
+  (pieceId: string): void
+}
+
+export interface NotPromoteHandler {
+  (): void
 }

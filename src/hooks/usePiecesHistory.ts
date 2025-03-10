@@ -1,6 +1,6 @@
 import { useState } from 'react'
 
-import type { PieceData } from '../types.ts'
+import type { PieceData, PromotePiece } from '../types.ts'
 
 interface UsePiecesHistoryReturn {
   currentMove: number
@@ -18,6 +18,7 @@ interface UsePiecesHistoryReturn {
 export function usePiecesHistory(
   currentPieces: PieceData[],
   setCurrentPieces: React.Dispatch<React.SetStateAction<PieceData[]>>,
+  setPromotePiece: React.Dispatch<React.SetStateAction<PromotePiece | null>>,
 ): UsePiecesHistoryReturn {
   const [history, setHistory] = useState<PieceData[][]>([
     structuredClone(currentPieces),
@@ -47,6 +48,7 @@ export function usePiecesHistory(
     const nextCurrentMove = 0
     setCurrentMove(nextCurrentMove)
     setCurrentPieces(history[nextCurrentMove])
+    setPromotePiece(null)
   }
 
   function handleStepBack(): void {
@@ -54,6 +56,7 @@ export function usePiecesHistory(
     const nextCurrentMove = currentMove - 1
     setCurrentMove(nextCurrentMove)
     setCurrentPieces(history[nextCurrentMove])
+    setPromotePiece(null)
   }
 
   function handleStepForward(): void {
@@ -61,6 +64,7 @@ export function usePiecesHistory(
     const nextCurrentMove = currentMove + 1
     setCurrentMove(nextCurrentMove)
     setCurrentPieces(history[nextCurrentMove])
+    setPromotePiece(null)
   }
 
   function handleLastStepForward(): void {
@@ -68,6 +72,7 @@ export function usePiecesHistory(
     const nextCurrentMove = history.length - 1
     setCurrentMove(nextCurrentMove)
     setCurrentPieces(history[nextCurrentMove])
+    setPromotePiece(null)
   }
 
   function isFirstMove(): boolean {

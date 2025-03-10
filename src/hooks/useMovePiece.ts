@@ -1,10 +1,16 @@
 import { isEqual } from 'lodash'
 
-import type { Mode, PieceData, PieceFlipHandler } from '../types.ts'
+import type {
+  Mode,
+  PieceData,
+  PieceFlipHandler,
+  PromotePiece,
+} from '../types.ts'
 import type { DragEndEvent } from '@dnd-kit/core'
 
 interface UseMovePieceReturn {
   flipPiece: PieceFlipHandler
+  dragPieceStart: () => void
   dropPiece: (event: DragEndEvent) => void
 }
 
@@ -15,6 +21,7 @@ export function useMovePiece(
   currentMove: number,
   savePiecesHistory: (nextPieces: PieceData[]) => void,
   updateLastPieceHistory: (nextPieces: PieceData[]) => void,
+  setPromotePiece: React.Dispatch<React.SetStateAction<PromotePiece | null>>,
 ): UseMovePieceReturn {
   const isEditing = mode === 'edit'
   const isSolving = mode === 'solve'
@@ -60,6 +67,10 @@ export function useMovePiece(
     if (isSolving) updateLastPieceHistory(nextPieces)
   }
 
+  function dragPieceStart(): void {
+    setPromotePiece(null)
+  }
+
   function dropPiece(event: DragEndEvent): void {
     if (!event.over) return
 
@@ -96,10 +107,16 @@ export function useMovePiece(
         // 盤に駒を移動させるとき
         if (!event.over.data.current) return
 
+        const newRow = event.over.data.current.row
+        const newCol = event.over.data.current.col
+
+        // 駒が成る
+        if (isSolving && isPromotable(movingPiece, newRow)) {
+          setPromotePiece({ piece: movingPiece, row: newRow, col: newCol })
+        }
+
         const capturedPiece = nextPieces.find(
-          (piece) =>
-            piece.row === event.over!.data.current!.row &&
-            piece.col === event.over!.data.current!.col,
+          (piece) => piece.row === newRow && piece.col === newCol,
         )
 
         if (capturedPiece) {
@@ -129,8 +146,8 @@ export function useMovePiece(
           movingPiece.opposite = true
         }
         movingPiece.place = 'board'
-        movingPiece.row = event.over.data.current.row
-        movingPiece.col = event.over.data.current.col
+        movingPiece.row = newRow
+        movingPiece.col = newCol
       }
     }
 
@@ -141,5 +158,22 @@ export function useMovePiece(
     if (isSolving) savePiecesHistory(nextPieces)
   }
 
-  return { flipPiece, dropPiece }
+  // 移動した駒が成ることができるか
+  function isPromotable(movingPiece: PieceData, newRow: number): boolean {
+    if (movingPiece.place !== 'board') return false
+    if (!movingPiece.promotable) return false
+    if (movingPiece.promoted) return false
+
+    if (!movingPiece.opposite) {
+      // 自分の駒の場合
+      // 敵陣に入るまたは、敵陣から出る
+      return newRow <= 2 || (movingPiece.row! <= 2 && newRow >= 3)
+    } else {
+      // 相手の駒の場合
+      // 自陣に入るまたは、自陣から出る
+      return newRow >= 6 || (movingPiece.row! >= 6 && newRow <= 5)
+    }
+  }
+
+  return { flipPiece, dragPieceStart, dropPiece }
 }
