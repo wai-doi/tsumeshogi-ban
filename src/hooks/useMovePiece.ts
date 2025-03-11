@@ -82,6 +82,8 @@ export function useMovePiece(
         (event.active.data.current && event.active.data.current.piece.id),
     )!
 
+    if (isNotMoved(movingPiece, event)) return
+
     // 解答モードのとき駒箱からは出せるのは相手番のみ
     if (isSolving && movingPiece.place === 'box' && currentMove % 2 === 0)
       return
@@ -156,6 +158,22 @@ export function useMovePiece(
     setCurrentPieces(nextPieces)
 
     if (isSolving) savePiecesHistory(nextPieces)
+  }
+
+  function isNotMoved(movingPiece: PieceData, event: DragEndEvent): boolean {
+    const place = movingPiece.place
+    const eventId = event.over!.id
+    console.log(eventId)
+    if (place === 'box' && eventId === 'piece-box') return true
+    if (place === 'stand' && eventId === 'piece-stand') return true
+    if (place === 'board' && (eventId as string).startsWith('square')) {
+      return (
+        movingPiece.row === event.over!.data.current!.row &&
+        movingPiece.col === event.over!.data.current!.col
+      )
+    } else {
+      return false
+    }
   }
 
   // 移動した駒が成ることができるか
