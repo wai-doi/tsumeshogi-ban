@@ -1,5 +1,5 @@
 {
   "*": ["prettier --ignore-unknown --check"],
-  "**/*.{ts,tsx}": ["eslint"],
+  "**/*.{ts,tsx}": ["eslint --max-warnings 0"],
   "**/*.css": ["stylelint"]
 }

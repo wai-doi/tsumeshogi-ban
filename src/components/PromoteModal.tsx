@@ -38,7 +38,6 @@ export function PromoteModal({
   onPromote,
   onNotPromote,
 }: PromoteModalProps): JSX.Element {
-  console.log('PromoteModal')
   const pieceImage = PieceImageMap.get(piece.kind)!
   const normalImage = piece.opposite ? pieceImage.opposite : pieceImage.normal
   const promotedImage = piece.opposite

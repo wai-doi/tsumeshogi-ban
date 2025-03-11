@@ -163,7 +163,7 @@ export function useMovePiece(
   function isNotMoved(movingPiece: PieceData, event: DragEndEvent): boolean {
     const place = movingPiece.place
     const eventId = event.over!.id
-    console.log(eventId)
+
     if (place === 'box' && eventId === 'piece-box') return true
     if (place === 'stand' && eventId === 'piece-stand') return true
     if (place === 'board' && (eventId as string).startsWith('square')) {
