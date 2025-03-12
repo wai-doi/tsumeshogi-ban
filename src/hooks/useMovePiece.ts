@@ -23,11 +23,13 @@ export function useMovePiece(
   updateLastPieceHistory: (nextPieces: PieceData[]) => void,
   setPromotePiece: React.Dispatch<React.SetStateAction<PromotePiece | null>>,
 ): UseMovePieceReturn {
-  const isEditing = mode === 'edit'
   const isSolving = mode === 'solve'
 
   function flipPiece(event: React.MouseEvent, pieceId: string): void {
     event.preventDefault()
+
+    if (isSolving) return
+
     const nextPieces = structuredClone(currentPieces)
     const piece = nextPieces.find((p) => p.id === pieceId)
     if (!piece) return
@@ -39,10 +41,8 @@ export function useMovePiece(
       piece.promoted = true
       piece.opposite = false
     } else if (
-      (isEditing && piece.promoted && !piece.opposite) ||
-      (isEditing && !piece.promotable && !piece.promoted && !piece.opposite) ||
-      (isSolving && piece.promoted && piece.opposite) ||
-      (isSolving && !piece.promotable && !piece.promoted && piece.opposite)
+      (piece.promoted && !piece.opposite) ||
+      (!piece.promotable && !piece.promoted && !piece.opposite)
     ) {
       // 相手の駒にする
       piece.promoted = false
@@ -52,10 +52,8 @@ export function useMovePiece(
       piece.promoted = true
       piece.opposite = true
     } else if (
-      (isEditing && piece.promoted && piece.opposite) ||
-      (isEditing && !piece.promotable && !piece.promoted && piece.opposite) ||
-      (isSolving && piece.promoted && !piece.opposite) ||
-      (isSolving && !piece.promotable && !piece.promoted && !piece.opposite)
+      (piece.promoted && piece.opposite) ||
+      (!piece.promotable && !piece.promoted && piece.opposite)
     ) {
       // 自分の駒にする
       piece.promoted = false
