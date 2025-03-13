@@ -138,6 +138,7 @@ export function Game(): JSX.Element {
                   promotePiece={promotePiece}
                   onPromote={promote}
                   onNotPromote={notPromote}
+                  currentMove={currentMove}
                 />
               </div>
               <RowNumbers />
@@ -184,10 +185,10 @@ export function Game(): JSX.Element {
                   </>
                 )}
               </div>
-              <PieceStand pieces={piecesInStand} />
+              <PieceStand pieces={piecesInStand} currentMove={currentMove} />
             </div>
           </div>
-          <PieceBox pieces={piecesInBox} />
+          <PieceBox pieces={piecesInBox} currentMove={currentMove} />
         </DndContext>
       </ModeContext.Provider>
     </>

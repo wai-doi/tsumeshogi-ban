@@ -15,6 +15,7 @@ interface BoardProps {
   promotePiece: PromotePiece | null
   onPromote: PromoteHandler
   onNotPromote: NotPromoteHandler
+  currentMove: number
 }
 
 export function Board({
@@ -23,6 +24,7 @@ export function Board({
   promotePiece,
   onPromote,
   onNotPromote,
+  currentMove,
 }: BoardProps): JSX.Element {
   const piecesOnBoard = currentPieces.filter((piece) => piece.place === 'board')
   const positionMap = new Map<string, PieceData>(
@@ -48,6 +50,7 @@ export function Board({
               {piece && (
                 <Piece
                   piece={piece}
+                  currentMove={currentMove}
                   onRightOrDoubleClick={(e) => onPieceFlip(e, piece.id)}
                 />
               )}

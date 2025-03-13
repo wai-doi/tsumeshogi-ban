@@ -7,9 +7,10 @@ import type { PieceData, PieceKind } from '../types.ts'
 
 interface PieceBoxProps {
   pieces: PieceData[]
+  currentMove: number
 }
 
-export function PieceBox({ pieces }: PieceBoxProps): JSX.Element {
+export function PieceBox({ pieces, currentMove }: PieceBoxProps): JSX.Element {
   const { setNodeRef } = useDroppable({
     id: 'piece-box',
   })
@@ -41,7 +42,7 @@ export function PieceBox({ pieces }: PieceBoxProps): JSX.Element {
           <div className="piece-group">
             {pieceArray.map((piece) => (
               <div key={piece.id} className="overlay">
-                <Piece piece={piece} />
+                <Piece piece={piece} currentMove={currentMove} />
               </div>
             ))}
           </div>

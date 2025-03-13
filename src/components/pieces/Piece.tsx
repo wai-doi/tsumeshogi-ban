@@ -17,26 +17,54 @@ import type { PieceData, PieceFlipHandler, PieceImage } from '../../types.ts'
 
 interface PieceProps {
   piece: PieceData
+  currentMove: number
   onRightOrDoubleClick?: PieceFlipHandler
 }
 
 export function Piece({
   piece,
+  currentMove,
   onRightOrDoubleClick,
 }: PieceProps): JSX.Element {
+  const mode = useContext(ModeContext)
+
+  const isDraggable = (): boolean => {
+    if (mode === 'edit') return true
+
+    const isMyTurn = currentMove % 2 === 0
+
+    switch (piece.place) {
+      case 'board':
+        return (isMyTurn && !piece.opposite) || (!isMyTurn && piece.opposite)
+      case 'stand':
+        return isMyTurn
+      case 'box':
+        return !isMyTurn
+    }
+  }
+
   const { attributes, listeners, setNodeRef, transform, isDragging } =
     useDraggable({
       id: piece.id,
       data: { piece: piece },
+      disabled: !isDraggable(),
     })
 
-  const mode = useContext(ModeContext)
+  const cursor = (): React.CSSProperties['cursor'] => {
+    if (isDragging) {
+      return 'grabbing'
+    } else if (isDraggable()) {
+      return 'grab'
+    } else {
+      return 'default'
+    }
+  }
 
   const style = {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
-    cursor: isDragging ? 'grabbing' : 'grab',
+    cursor: cursor(),
   }
 
   const getImageSet = (): PieceImage => {

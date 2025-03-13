@@ -7,9 +7,13 @@ import type { PieceData } from '../types.ts'
 
 interface PieceStandProps {
   pieces: PieceData[]
+  currentMove: number
 }
 
-export function PieceStand({ pieces }: PieceStandProps): JSX.Element {
+export function PieceStand({
+  pieces,
+  currentMove,
+}: PieceStandProps): JSX.Element {
   const { setNodeRef } = useDroppable({
     id: 'piece-stand',
   })
@@ -18,7 +22,7 @@ export function PieceStand({ pieces }: PieceStandProps): JSX.Element {
     <>
       <div ref={setNodeRef} className="piece-stand">
         {[...pieces].reverse().map((piece, index) => {
-          return <Piece key={index} piece={piece} />
+          return <Piece key={index} piece={piece} currentMove={currentMove} />
         })}
       </div>
     </>
