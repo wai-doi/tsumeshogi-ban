@@ -65,6 +65,7 @@ export function Piece({
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,
     cursor: cursor(),
+    zIndex: isDragging ? 10 : 1,
   }
 
   const getImageSet = (): PieceImage => {
