@@ -60,7 +60,7 @@ export function Piece({
     }
   }
 
-  const style = {
+  const style: React.CSSProperties = {
     transform: transform
       ? `translate3d(${transform.x}px, ${transform.y}px, 0)`
       : undefined,

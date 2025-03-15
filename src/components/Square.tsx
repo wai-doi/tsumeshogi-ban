@@ -31,7 +31,7 @@ export function Square({
     data: { row: row, col: col },
   })
 
-  const style = {
+  const style: React.CSSProperties = {
     background: 'red',
   }
 
