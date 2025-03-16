@@ -16,6 +16,7 @@ interface BoardProps {
   onPromote: PromoteHandler
   onNotPromote: NotPromoteHandler
   currentMove: number
+  isDroppableSquare: (row: number, col: number) => boolean
 }
 
 export function Board({
@@ -25,6 +26,7 @@ export function Board({
   onPromote,
   onNotPromote,
   currentMove,
+  isDroppableSquare,
 }: BoardProps): JSX.Element {
   const piecesOnBoard = currentPieces.filter((piece) => piece.place === 'board')
   const positionMap = new Map<string, PieceData>(
@@ -46,6 +48,7 @@ export function Board({
               promotePiece={isPromotePiece ? promotePiece : null}
               onPromote={onPromote}
               onNotPromote={onNotPromote}
+              isDroppableSquare={isDroppableSquare}
             >
               {piece && (
                 <Piece

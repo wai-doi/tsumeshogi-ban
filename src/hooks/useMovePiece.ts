@@ -1,4 +1,7 @@
 import { isEqual } from 'lodash'
+import { useState } from 'react'
+
+import { canMovePiece } from '../utils/moveValidator.ts'
 
 import type {
   Mode,
@@ -6,12 +9,13 @@ import type {
   PieceFlipHandler,
   PromotePiece,
 } from '../types.ts'
-import type { DragEndEvent } from '@dnd-kit/core'
+import type { DragEndEvent, DragStartEvent } from '@dnd-kit/core'
 
 interface UseMovePieceReturn {
   flipPiece: PieceFlipHandler
-  dragPieceStart: () => void
+  dragPieceStart: (event: DragStartEvent) => void
   dropPiece: (event: DragEndEvent) => void
+  isDroppableSquare: (row: number, col: number) => boolean
 }
 
 export function useMovePiece(
@@ -23,6 +27,9 @@ export function useMovePiece(
   updateLastPieceHistory: (nextPieces: PieceData[]) => void,
   setPromotePiece: React.Dispatch<React.SetStateAction<PromotePiece | null>>,
 ): UseMovePieceReturn {
+  const [draggingPiece, setDraggingPiece] = useState<PieceData | null>(null)
+
+  const isEditing = mode === 'edit'
   const isSolving = mode === 'solve'
 
   function flipPiece(event: React.MouseEvent, pieceId: string): void {
@@ -65,11 +72,16 @@ export function useMovePiece(
     if (isSolving) updateLastPieceHistory(nextPieces)
   }
 
-  function dragPieceStart(): void {
+  function dragPieceStart(event: DragStartEvent): void {
+    const id = event.active.id
+    const piece = currentPieces.find((piece) => piece.id === id)
+    setDraggingPiece(piece!)
     setPromotePiece(null)
   }
 
   function dropPiece(event: DragEndEvent): void {
+    setDraggingPiece(null)
+
     if (!event.over) return
 
     const nextPieces = structuredClone(currentPieces)
@@ -109,6 +121,12 @@ export function useMovePiece(
 
         const newRow = event.over.data.current.row
         const newCol = event.over.data.current.col
+
+        if (
+          isSolving &&
+          !canMovePiece(movingPiece, newRow, newCol, currentPieces)
+        )
+          return
 
         // 駒が成る
         if (isSolving && isPromotable(movingPiece, newRow)) {
@@ -191,5 +209,14 @@ export function useMovePiece(
     }
   }
 
-  return { flipPiece, dragPieceStart, dropPiece }
+  function isDroppableSquare(row: number, col: number): boolean {
+    if (!draggingPiece) return false
+    if (isEditing) return true
+    if (draggingPiece.place === 'box' || draggingPiece.place === 'stand')
+      return true
+
+    return canMovePiece(draggingPiece, row, col, currentPieces)
+  }
+
+  return { flipPiece, dragPieceStart, dropPiece, isDroppableSquare }
 }

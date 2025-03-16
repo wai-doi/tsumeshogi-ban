@@ -43,15 +43,16 @@ export function Game(): JSX.Element {
     isLastMove,
   } = usePiecesHistory(currentPieces, setCurrentPieces, setPromotePiece)
 
-  const { flipPiece, dragPieceStart, dropPiece } = useMovePiece(
-    mode,
-    currentPieces,
-    setCurrentPieces,
-    currentMove,
-    savePiecesHistory,
-    updateLastPieceHistory,
-    setPromotePiece,
-  )
+  const { flipPiece, dragPieceStart, dropPiece, isDroppableSquare } =
+    useMovePiece(
+      mode,
+      currentPieces,
+      setCurrentPieces,
+      currentMove,
+      savePiecesHistory,
+      updateLastPieceHistory,
+      setPromotePiece,
+    )
 
   const { promote, notPromote } = usePromotePiece(
     currentPieces,
@@ -139,6 +140,7 @@ export function Game(): JSX.Element {
                   onPromote={promote}
                   onNotPromote={notPromote}
                   currentMove={currentMove}
+                  isDroppableSquare={isDroppableSquare}
                 />
               </div>
               <RowNumbers />
