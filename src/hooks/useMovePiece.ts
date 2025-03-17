@@ -124,6 +124,7 @@ export function useMovePiece(
 
         if (
           isSolving &&
+          movingPiece.place === 'board' &&
           !canMovePiece(movingPiece, newRow, newCol, currentPieces)
         )
           return
