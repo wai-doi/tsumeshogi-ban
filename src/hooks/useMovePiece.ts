@@ -100,6 +100,8 @@ export function useMovePiece(
 
     switch (event.over.id) {
       case 'piece-box':
+        if (isSolving) return
+
         // 駒箱に駒を移動させるとき
         movingPiece.place = 'box'
         movingPiece.row = null
@@ -108,6 +110,8 @@ export function useMovePiece(
         movingPiece.opposite = false
         break
       case 'piece-stand':
+        if (isSolving) return
+
         // 駒台に駒を移動させるとき
         movingPiece.place = 'stand'
         movingPiece.row = null
