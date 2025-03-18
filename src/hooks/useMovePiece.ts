@@ -217,8 +217,6 @@ export function useMovePiece(
   function isDroppableSquare(row: number, col: number): boolean {
     if (!draggingPiece) return false
     if (isEditing) return true
-    if (draggingPiece.place === 'box' || draggingPiece.place === 'stand')
-      return true
 
     return canMovePiece(draggingPiece, row, col, currentPieces)
   }

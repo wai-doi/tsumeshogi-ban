@@ -11,6 +11,10 @@ export function canMovePiece(
   if (existingPiece && movingPiece.opposite === existingPiece.opposite)
     return false
 
+  if (movingPiece.place === 'stand' || movingPiece.place === 'box') {
+    return existingPiece ? false : true
+  }
+
   switch (movingPiece.kind) {
     case 'pawn':
       if (movingPiece.promoted) {
