@@ -30,6 +30,9 @@ export function Square({
   onNotPromote,
   isDroppableSquare,
 }: SquareProps): JSX.Element {
+  // 符号を表すときの筋と段
+  const shogiPosition = `${9 - col}-${row + 1}`
+
   const mode = useContext(ModeContext)
   const isEditing = mode === 'edit'
 
@@ -56,7 +59,12 @@ export function Square({
 
   return (
     <>
-      <div ref={setNodeRef} className="square" style={style}>
+      <div
+        ref={setNodeRef}
+        id={`square-${shogiPosition}`}
+        className="square"
+        style={style}
+      >
         {children}
         {promotePiece && (
           <PromoteModal

@@ -124,6 +124,7 @@ export function Piece({
           {...listeners}
           {...attributes}
           src={imagePath()}
+          id={piece.id}
           className="piece"
           onContextMenu={(e) =>
             onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)

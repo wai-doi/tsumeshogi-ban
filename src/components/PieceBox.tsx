@@ -26,7 +26,8 @@ export function PieceBox({ pieces, currentMove }: PieceBoxProps): JSX.Element {
       )?.pieceArray
 
       if (pieceArray) {
-        pieceArray.push(piece)
+        // 重ねたとき id の番号が小さい駒が前面になるように並べるため unshift にしている
+        pieceArray.unshift(piece)
       } else {
         groupedPieces.push({ kind: piece.kind, pieceArray: [piece] })
       }
