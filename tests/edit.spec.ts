@@ -2,9 +2,13 @@ import { expect, test } from '@playwright/test'
 
 import { dragAndDrop } from './helpers.ts'
 
-test('編集モードで駒箱の駒を駒台に動かせること', async ({ page }) => {
-  await page.goto('/')
+test.beforeEach(async ({ page }) => {
+  page.on('dialog', (dialog) => dialog.accept())
 
+  await page.goto('/')
+})
+
+test('編集モードで駒箱の駒を駒台に動かせること', async ({ page }) => {
   const piece = page.locator(`#pawn-0`)
   const stand = page.locator('.piece-stand')
   await dragAndDrop(page, piece, stand)
@@ -13,8 +17,6 @@ test('編集モードで駒箱の駒を駒台に動かせること', async ({ pa
 })
 
 test('編集モードで駒箱の駒を盤に動かせること', async ({ page }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const square = page.locator('#square-5-5')
   await dragAndDrop(page, piece, square)
@@ -23,8 +25,6 @@ test('編集モードで駒箱の駒を盤に動かせること', async ({ page 
 })
 
 test('編集モードで駒台の駒を駒箱に動かせること', async ({ page }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const stand = page.locator('.piece-stand')
   await dragAndDrop(page, piece, stand)
@@ -39,8 +39,6 @@ test('編集モードで駒台の駒を駒箱に動かせること', async ({ pa
 })
 
 test('編集モードで駒台の駒を盤に動かせること', async ({ page }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const stand = page.locator('.piece-stand')
   await dragAndDrop(page, piece, stand)
@@ -55,8 +53,6 @@ test('編集モードで駒台の駒を盤に動かせること', async ({ page 
 })
 
 test('編集モードで盤の駒を駒箱に動かせること', async ({ page }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const square = page.locator('#square-5-5')
   await dragAndDrop(page, piece, square)
@@ -71,8 +67,6 @@ test('編集モードで盤の駒を駒箱に動かせること', async ({ page 
 })
 
 test('編集モードで盤の駒を駒台に動かせること', async ({ page }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const square = page.locator('#square-5-5')
   await dragAndDrop(page, piece, square)
@@ -87,8 +81,6 @@ test('編集モードで盤の駒を駒台に動かせること', async ({ page 
 })
 
 test('編集モードで盤の駒を盤の別の位置に動かせること', async ({ page }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const square_5_5 = page.locator('#square-5-5')
   await dragAndDrop(page, piece, square_5_5)
@@ -105,8 +97,6 @@ test('編集モードで盤の駒を盤の別の位置に動かせること', as
 test('編集モードで盤の駒を右クリックすると駒の向きと成りが変わること', async ({
   page,
 }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const square = page.locator('#square-5-5')
   await dragAndDrop(page, piece, square)
@@ -134,8 +124,6 @@ test('編集モードで盤の駒を右クリックすると駒の向きと成�
 test('編集モードで盤の駒をダブルクリックすると駒の向きと成りが変わること', async ({
   page,
 }) => {
-  await page.goto('/')
-
   const piece = page.locator(`#pawn-0`)
   const square = page.locator('#square-5-5')
   await dragAndDrop(page, piece, square)
@@ -158,4 +146,90 @@ test('編集モードで盤の駒をダブルクリックすると駒の向き�
   await piece.dblclick()
 
   await expect(piece).toHaveAttribute('src', /black_pawn\.png/)
+})
+
+test('編集モードでクリアボタンを押すと盤面の駒がすべて駒箱に戻ること', async ({
+  page,
+}) => {
+  const piece1 = page.locator(`#pawn-0`)
+  const square_5_5 = page.locator('#square-5-5')
+  await dragAndDrop(page, piece1, square_5_5)
+
+  const piece2 = page.locator(`#pawn-1`)
+  const square_3_3 = page.locator('#square-3-3')
+  await dragAndDrop(page, piece2, square_3_3)
+
+  await expect(square_5_5.locator('#pawn-0')).toBeVisible()
+  await expect(square_3_3.locator('#pawn-1')).toBeVisible()
+
+  // クリックが反応しない場合があるため待機
+  await page.waitForTimeout(100)
+  await page.getByText('配置をクリア').click()
+
+  await expect(square_5_5.locator('#pawn-0')).not.toBeVisible()
+  await expect(square_3_3.locator('#pawn-1')).not.toBeVisible()
+  const box = page.locator('.piece-box')
+  await expect(box.locator('#pawn-0')).toBeVisible()
+  await expect(box.locator('#pawn-1')).toBeVisible()
+})
+
+test('編集モードで盤面を編集して解答モードに切り替えると、リロード後に保存された盤面で表示されること', async ({
+  page,
+}) => {
+  const piece1 = page.locator(`#pawn-0`)
+  const square = page.locator('#square-5-5')
+  await dragAndDrop(page, piece1, square)
+
+  const piece2 = page.locator(`#pawn-1`)
+  const stand = page.locator('.piece-stand')
+  await dragAndDrop(page, piece2, stand)
+
+  await expect(square.locator('#pawn-0')).toBeVisible()
+  await expect(stand.locator('#pawn-1')).toBeVisible()
+
+  // クリックしても反応しない場合があるため待機
+  await page.waitForTimeout(100)
+  await page.getByText('保存して解答する').click()
+
+  // 解答モードが表示されたことを確認
+  await expect(page.getByText('盤面を編集する')).toBeVisible()
+
+  await page.reload()
+
+  await expect(square.locator('#pawn-0')).toBeVisible()
+  await expect(stand.locator('#pawn-1')).toBeVisible()
+})
+
+test('編集モードで盤面が保存された状態で、保存の削除をするとリロード後に初期盤面で表示されること', async ({
+  page,
+}) => {
+  const piece1 = page.locator(`#pawn-0`)
+  const square = page.locator('#square-5-5')
+  await dragAndDrop(page, piece1, square)
+
+  const piece2 = page.locator(`#pawn-1`)
+  const stand = page.locator('.piece-stand')
+  await dragAndDrop(page, piece2, stand)
+
+  await expect(square.locator('#pawn-0')).toBeVisible()
+  await expect(stand.locator('#pawn-1')).toBeVisible()
+
+  // クリックしても反応しない場合があるため待機
+  await page.waitForTimeout(100)
+  await page.getByText('保存して解答する').click()
+
+  // 解答モードが表示されたことを確認
+  await expect(page.getByText('盤面を編集する')).toBeVisible()
+
+  await page.reload()
+
+  await expect(square.locator('#pawn-0')).toBeVisible()
+  await expect(stand.locator('#pawn-1')).toBeVisible()
+
+  await page.getByText('保存した配置を消す').click()
+
+  await page.reload()
+
+  await expect(square.locator('#pawn-0')).not.toBeVisible()
+  await expect(stand.locator('#pawn-1')).not.toBeVisible()
 })
