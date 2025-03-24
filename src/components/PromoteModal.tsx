@@ -47,12 +47,12 @@ export function PromoteModal({
   return (
     <div className="promote-modal">
       <img
-        className="promote-modal-image"
+        className="promote-modal-image promote"
         src={promotedImage}
         onClick={() => onPromote(piece.id)}
       ></img>
       <img
-        className="promote-modal-image"
+        className="promote-modal-image normal"
         src={normalImage}
         onClick={onNotPromote}
       ></img>
