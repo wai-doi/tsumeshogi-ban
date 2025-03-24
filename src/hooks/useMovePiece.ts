@@ -143,6 +143,9 @@ export function useMovePiece(
         )
 
         if (capturedPiece) {
+          // 編集モードでは駒のある位置には置けない
+          if (isEditing) return
+
           if (!movingPiece.opposite && capturedPiece.opposite) {
             // 相手の駒の上には持ち駒は打てない
             if (isSolving && movingPiece.place === 'stand') return
