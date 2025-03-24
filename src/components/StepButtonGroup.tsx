@@ -27,6 +27,7 @@ export function StepButtonGroup({
   return (
     <div className="step-buttons">
       <button
+        id="first-step-back"
         className="step-button"
         onClick={onFirstStepBack}
         disabled={isFirstMove()}
@@ -34,6 +35,7 @@ export function StepButtonGroup({
         <FaAngleDoubleLeft />
       </button>
       <button
+        id="step-back"
         className="step-button"
         onClick={onStepBack}
         disabled={isFirstMove()}
@@ -41,6 +43,7 @@ export function StepButtonGroup({
         <FaAngleLeft />
       </button>
       <button
+        id="step-forward"
         className="step-button"
         onClick={onStepForward}
         disabled={isLastMove()}
@@ -48,6 +51,7 @@ export function StepButtonGroup({
         <FaAngleRight />
       </button>
       <button
+        id="last-step-forward"
         className="step-button"
         onClick={onLastStepForward}
         disabled={isLastMove()}

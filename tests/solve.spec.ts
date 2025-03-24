@@ -196,3 +196,79 @@ test('解答モードで駒が敵陣から出たとき成ることができる�
   await expect(square_5_6.locator('#silver-1')).toBeVisible()
   await expect(enemySilver).toHaveAttribute('src', /white_prom_silver\.png/)
 })
+
+test('解答モード手を進めたり戻したりできること', async ({ page }) => {
+  const pawn = page.locator(`#pawn-0`)
+  const square_2_4 = page.locator('#square-2-4')
+  await dragAndDrop(page, pawn, square_2_4)
+
+  const lance = page.locator('#lance-0')
+  const square_2_9 = page.locator('#square-2-9')
+  await dragAndDrop(page, lance, square_2_9)
+
+  const king = page.locator(`#king-0`)
+  const square_1_2 = page.locator('#square-1-2')
+  await dragAndDrop(page, king, square_1_2)
+
+  // 右クリックで敵駒にする
+  await king.click({ button: 'right' })
+
+  await expect(king).toHaveAttribute('src', /white_king2\.png/)
+
+  // クリックしても反応しない場合があるため待機
+  await page.waitForTimeout(100)
+  await page.getByText('保存して解答する').click()
+
+  // 解答モードが表示されたことを確認
+  await expect(page.getByText('盤面を編集する')).toBeVisible()
+
+  const square_2_3 = page.locator('#square-2-3')
+  await dragAndDrop(page, pawn, square_2_3)
+
+  await page.waitForTimeout(100)
+  await page.locator('.promote').click()
+
+  await expect(square_2_3.locator('#pawn-0')).toBeVisible()
+  await expect(pawn).toHaveAttribute('src', /black_prom_pawn\.png/)
+
+  const square_2_1 = page.locator('#square-2-1')
+  await dragAndDrop(page, king, square_2_1)
+
+  await expect(square_2_1.locator('#king-0')).toBeVisible()
+
+  const square_2_2 = page.locator('#square-2-2')
+  await dragAndDrop(page, pawn, square_2_2)
+
+  await expect(square_2_2.locator('#pawn-0')).toBeVisible()
+
+  // ここまでで3手詰めが完了
+
+  // 一手戻す
+  await page.waitForTimeout(100)
+  await page.locator('#step-back').click()
+
+  await expect(square_2_3.locator('#pawn-0')).toBeVisible()
+  await expect(pawn).toHaveAttribute('src', /black_prom_pawn\.png/)
+  await expect(square_2_1.locator('#king-0')).toBeVisible()
+
+  // 一手進める
+  await page.locator('#step-forward').click()
+
+  await expect(square_2_2.locator('#pawn-0')).toBeVisible()
+  await expect(pawn).toHaveAttribute('src', /black_prom_pawn\.png/)
+  await expect(square_2_1.locator('#king-0')).toBeVisible()
+
+  // 初期盤面に戻す
+  await page.locator('#first-step-back').click()
+
+  await expect(square_2_4.locator('#pawn-0')).toBeVisible()
+  await expect(pawn).toHaveAttribute('src', /black_pawn\.png/)
+  await expect(square_1_2.locator('#king-0')).toBeVisible()
+
+  // 最終盤面に進める
+  await page.locator('#last-step-forward').click()
+
+  await expect(square_2_2.locator('#pawn-0')).toBeVisible()
+  await expect(pawn).toHaveAttribute('src', /black_prom_pawn\.png/)
+  await expect(square_2_1.locator('#king-0')).toBeVisible()
+})
