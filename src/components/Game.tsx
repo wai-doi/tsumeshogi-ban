@@ -1,8 +1,9 @@
 import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
-import { createContext, useState } from 'react'
+import { useState } from 'react'
 import { FaChessKing, FaEdit, FaEraser, FaTrash } from 'react-icons/fa'
 
+import { ModeContext } from '../contexts/modeContext.ts'
 import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
 import { useMovePiece } from '../hooks/useMovePiece.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
@@ -19,8 +20,6 @@ import { RowNumbers } from './RowNumbers.tsx'
 import { StepButtonGroup } from './StepButtonGroup.tsx'
 
 import type { Mode, PromotePiece } from '../types.ts'
-
-export const ModeContext = createContext<Mode>('edit')
 
 export function Game(): JSX.Element {
   const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()

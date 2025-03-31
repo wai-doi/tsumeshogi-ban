@@ -1,7 +1,7 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useContext } from 'react'
 
-import { ModeContext } from '../Game.tsx'
+import { ModeContext } from '../../contexts/modeContext.ts'
 
 import { BishopImage } from './BishopImage.tsx'
 import { GoldImage } from './GoldImage.tsx'

@@ -1,7 +1,8 @@
 import { useDroppable } from '@dnd-kit/core'
 import { useContext } from 'react'
 
-import { ModeContext } from './Game.tsx'
+import { ModeContext } from '../contexts/modeContext.ts'
+
 import { PromoteModal } from './PromoteModal.tsx'
 import './Square.css'
 
