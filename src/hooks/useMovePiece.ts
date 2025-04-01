@@ -134,7 +134,11 @@ export function useMovePiece(
           return
 
         // 駒が成る
-        if (isSolving && isPromotable(movingPiece, newRow)) {
+        if (
+          isSolving &&
+          isPromotable(movingPiece, newRow) &&
+          !isPieceStauck(movingPiece, newRow)
+        ) {
           setPromotePiece({ piece: movingPiece, row: newRow, col: newCol })
         }
 
@@ -170,6 +174,10 @@ export function useMovePiece(
         if (isSolving && movingPiece.place === 'box') {
           // 解答モードでは駒箱の駒を置いたら相手の駒になる
           movingPiece.opposite = true
+        }
+        if (isSolving && isPieceStauck(movingPiece, newRow)) {
+          // これ以上進めなければ強制的に成る
+          movingPiece.promoted = true
         }
         movingPiece.place = 'board'
         movingPiece.row = newRow
@@ -214,6 +222,30 @@ export function useMovePiece(
       // 相手の駒の場合
       // 自陣に入るまたは、自陣から出る
       return newRow >= 6 || (movingPiece.row! >= 6 && newRow <= 5)
+    }
+  }
+
+  // 駒がこれ以上進めないか
+  function isPieceStauck(movingPiece: PieceData, newRow: number): boolean {
+    if (movingPiece.place !== 'board') return false
+
+    if (
+      (movingPiece.kind === 'pawn' || movingPiece.kind === 'lance') &&
+      !movingPiece.promoted
+    ) {
+      // 歩か香車の場合
+      return (
+        (!movingPiece.opposite && newRow === 0) ||
+        (movingPiece.opposite && newRow === 8)
+      )
+    } else if (movingPiece.kind === 'knight' && !movingPiece.promoted) {
+      // 桂馬の場合
+      return (
+        (!movingPiece.opposite && newRow <= 1) ||
+        (movingPiece.opposite && newRow >= 7)
+      )
+    } else {
+      return false
     }
   }
 
