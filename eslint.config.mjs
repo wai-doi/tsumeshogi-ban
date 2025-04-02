@@ -1,34 +1,26 @@
+import js from '@eslint/js'
 import { defineConfig, globalIgnores } from 'eslint/config'
-import { fixupConfigRules } from '@eslint/compat'
+import eslintConfigPrettier from 'eslint-config-prettier'
+import importPlugin from 'eslint-plugin-import'
+import reactHooks from 'eslint-plugin-react-hooks'
 import reactRefresh from 'eslint-plugin-react-refresh'
 import globals from 'globals'
-import tsParser from '@typescript-eslint/parser'
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import js from '@eslint/js'
-import { FlatCompat } from '@eslint/eslintrc'
-
-const __filename = fileURLToPath(import.meta.url)
-const __dirname = path.dirname(__filename)
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-})
+import tseslint from 'typescript-eslint'
 
 export default defineConfig([
   globalIgnores(['**/dist', '**/eslint.config.mjs']),
-  {
-    extends: fixupConfigRules(
-      compat.extends(
-        'eslint:recommended',
-        'plugin:@typescript-eslint/recommended',
-        'plugin:react-hooks/recommended',
-        'plugin:import/recommended',
-        'prettier',
-      ),
-    ),
 
+  js.configs.recommended,
+
+  tseslint.configs.recommended,
+
+  reactHooks.configs['recommended-latest'],
+
+  importPlugin.flatConfigs.recommended,
+
+  eslintConfigPrettier,
+
+  {
     plugins: {
       'react-refresh': reactRefresh,
     },
@@ -38,7 +30,7 @@ export default defineConfig([
         ...globals.browser,
       },
 
-      parser: tsParser,
+      parser: tseslint.parser,
     },
 
     rules: {
