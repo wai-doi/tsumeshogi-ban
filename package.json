@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "style-lint": "stylelint \"**/*.css\" --fix",
+    "lint:eslint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "lint:stylelint": "stylelint \"**/*.css\" --fix",
     "format": "prettier . --write",
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",

@@ -17,9 +17,9 @@ jobs:
       - name: Run Prettier
         run: npx prettier --check .
       - name: Run ESLint
-        run: npm run eslint
+        run: npm run lint:eslint
       - name: Run Stylelint
-        run: npm run style-lint
+        run: npm run lint:stylelint
 
   test:
     runs-on: ubuntu-latest
