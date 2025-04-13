@@ -12,8 +12,8 @@
     "preview": "vite preview",
     "deploy": "npm run build && gh-pages -d dist",
     "prepare": "husky",
-    "test": "jest",
-    "e2e": "playwright test"
+    "test": "jest src/tests",
+    "e2e": "playwright test tests/e2e"
   },
   "dependencies": {
     "@dnd-kit/core": "^6.3.1",
