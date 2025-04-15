@@ -2,6 +2,66 @@ import { canMovePiece } from '../../utils/moveValidator.ts'
 
 import type { PieceData } from '../../types.ts'
 
+test('移動先に自駒があると移動できないこと', () => {
+  const movingPiece: PieceData = {
+    id: 'pawn-1',
+    kind: 'pawn',
+    place: 'board',
+    row: 4,
+    col: 4,
+    promoted: false,
+    opposite: false,
+    promotable: true,
+  }
+
+  expect(canMovePiece(movingPiece, 3, 4, [])).toBe(true)
+
+  const currentPieces: PieceData[] = [
+    {
+      id: 'lance-1',
+      kind: 'lance',
+      place: 'board',
+      row: 3,
+      col: 4,
+      promoted: false,
+      opposite: false,
+      promotable: true,
+    },
+  ]
+
+  expect(canMovePiece(movingPiece, 3, 4, currentPieces)).toBe(false)
+})
+
+test('移動先に敵駒があっても移動できること', () => {
+  const movingPiece: PieceData = {
+    id: 'pawn-1',
+    kind: 'pawn',
+    place: 'board',
+    row: 4,
+    col: 4,
+    promoted: false,
+    opposite: false,
+    promotable: true,
+  }
+
+  expect(canMovePiece(movingPiece, 3, 4, [])).toBe(true)
+
+  const currentPieces: PieceData[] = [
+    {
+      id: 'lance-1',
+      kind: 'lance',
+      place: 'board',
+      row: 3,
+      col: 4,
+      promoted: false,
+      opposite: true,
+      promotable: true,
+    },
+  ]
+
+  expect(canMovePiece(movingPiece, 3, 4, currentPieces)).toBe(true)
+})
+
 describe('歩の移動', () => {
   let movingPiece: PieceData
 
@@ -614,4 +674,64 @@ describe('玉の移動', () => {
     expect(canMovePiece(movingPiece, 5, 4, [])).toBe(true)
     expect(canMovePiece(movingPiece, 5, 5, [])).toBe(true)
   })
+})
+
+test('移動先に自駒があると移動できないこと', () => {
+  const movingPiece: PieceData = {
+    id: 'pawn-1',
+    kind: 'pawn',
+    place: 'board',
+    row: 4,
+    col: 4,
+    promoted: false,
+    opposite: false,
+    promotable: true,
+  }
+
+  expect(canMovePiece(movingPiece, 3, 4, [])).toBe(true)
+
+  const currentPieces: PieceData[] = [
+    {
+      id: 'lance-1',
+      kind: 'lance',
+      place: 'board',
+      row: 3,
+      col: 4,
+      promoted: false,
+      opposite: false,
+      promotable: true,
+    },
+  ]
+
+  expect(canMovePiece(movingPiece, 3, 4, currentPieces)).toBe(false)
+})
+
+test('移動先に敵駒があると移動できること', () => {
+  const movingPiece: PieceData = {
+    id: 'pawn-1',
+    kind: 'pawn',
+    place: 'board',
+    row: 4,
+    col: 4,
+    promoted: false,
+    opposite: false,
+    promotable: true,
+  }
+
+  expect(canMovePiece(movingPiece, 3, 4, [])).toBe(true)
+
+  const currentPieces: PieceData[] = [
+    {
+      id: 'lance-1',
+      kind: 'lance',
+      place: 'board',
+      row: 3,
+      col: 4,
+      promoted: false,
+      opposite: true,
+      promotable: true,
+    },
+  ]
+
+  expect(canMovePiece(movingPiece, 3, 4, currentPieces)).toBe(true)
 })
