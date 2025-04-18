@@ -1,9 +1,0 @@
-.row-numbers {
-  display: flex;
-  flex-flow: column;
-  justify-content: space-between;
-  padding-top: 48px;
-  padding-bottom: 30px;
-  font-size: small;
-  color: gray;
-}

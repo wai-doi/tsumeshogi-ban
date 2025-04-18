@@ -1,5 +1,6 @@
 import { useDraggable } from '@dnd-kit/core'
 import { useContext } from 'react'
+import { styled } from 'styled-components'
 
 import { ModeContext } from '../../contexts/modeContext.ts'
 
@@ -9,11 +10,17 @@ import { KingImage } from './KingImage.tsx'
 import { KnightImage } from './KnightImage.tsx'
 import { LanceImage } from './LanceImage.tsx'
 import { PawnImage } from './PawnImage.tsx'
-import './Piece.css'
 import { RookImage } from './RookImage.tsx'
 import { SilverImage } from './SilverImage.tsx'
 
 import type { PieceData, PieceFlipHandler, PieceImage } from '../../types.ts'
+
+const PieceImg = styled.img`
+  position: relative;
+  width: 60px;
+  height: 64px;
+  -webkit-user-drag: none;
+`
 
 interface PieceProps {
   piece: PieceData
@@ -118,14 +125,13 @@ export function Piece({
   return (
     <>
       <span>
-        <img
+        <PieceImg
           ref={setNodeRef}
           style={style}
           {...listeners}
           {...attributes}
           src={imagePath()}
           id={piece.id}
-          className="piece"
           onContextMenu={(e) =>
             onRightOrDoubleClick && onRightOrDoubleClick(e, piece.id)
           }

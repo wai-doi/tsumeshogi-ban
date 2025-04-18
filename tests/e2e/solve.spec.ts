@@ -89,7 +89,7 @@ test('解答モードで駒の動かせる範囲に敵駒がある場合はそ�
   await dragAndDrop(page, piece1, square_5_4)
 
   await expect(square_5_4.locator('#pawn-0')).toBeVisible()
-  const stand = page.locator('.piece-stand')
+  const stand = page.locator('#piece-stand')
   await expect(stand.locator('#gold-0')).toBeVisible()
 })
 

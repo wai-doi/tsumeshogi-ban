@@ -1,4 +1,5 @@
-import './PromoteModal.css'
+import { styled } from 'styled-components'
+
 import { BishopImage } from './pieces/BishopImage.tsx'
 import { GoldImage } from './pieces/GoldImage.tsx'
 import { KingImage } from './pieces/KingImage.tsx'
@@ -15,6 +16,22 @@ import type {
   PieceKind,
   PromoteHandler,
 } from '../types.ts'
+
+const PromoteModalDiv = styled.div`
+  position: absolute;
+  top: 70px;
+  left: -30px;
+  z-index: 100;
+  display: flex;
+  background-color: orange;
+`
+
+const PromoteModalImg = styled.img`
+  width: 60px;
+  height: 64px;
+  cursor: pointer;
+  border: 2px solid #c67a2d;
+`
 
 const PieceImageMap = new Map<PieceKind, PieceImage>([
   ['pawn', PawnImage],
@@ -45,17 +62,17 @@ export function PromoteModal({
     : pieceImage.promoted
 
   return (
-    <div className="promote-modal">
-      <img
-        className="promote-modal-image promote"
+    <PromoteModalDiv>
+      <PromoteModalImg
+        className="promote"
         src={promotedImage}
         onClick={() => onPromote(piece.id)}
-      ></img>
-      <img
-        className="promote-modal-image normal"
+      ></PromoteModalImg>
+      <PromoteModalImg
+        className="normal"
         src={normalImage}
         onClick={onNotPromote}
-      ></img>
-    </div>
+      ></PromoteModalImg>
+    </PromoteModalDiv>
   )
 }

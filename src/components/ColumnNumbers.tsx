@@ -1,11 +1,19 @@
-import './ColumnNumbers.css'
+import { styled } from 'styled-components'
+
+const ColumnNumbersDiv = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 0 33px;
+  font-size: small;
+  color: gray;
+`
 
 export function ColumnNumbers(): JSX.Element {
   return (
-    <div className="column-numbers">
+    <ColumnNumbersDiv>
       {'987654321'.split('').map((num) => (
         <span key={num}>{num}</span>
       ))}
-    </div>
+    </ColumnNumbersDiv>
   )
 }

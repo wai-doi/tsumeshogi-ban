@@ -1,24 +1,50 @@
 import { FaGithub, FaQuestionCircle } from 'react-icons/fa'
+import { styled } from 'styled-components'
 
-import './App.css'
 import { Game } from './components/Game.tsx'
+
+const RootContainer = styled.div`
+  max-width: 65%;
+  margin: 0 auto;
+  text-align: center;
+  user-select: none;
+`
+
+const TitleContainer = styled.div`
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`
+
+const Navigation = styled.div`
+  position: absolute;
+  right: 0;
+  font-size: 40px;
+  color: white;
+
+  a {
+    margin: 0 10px;
+    color: white;
+  }
+`
 
 function App(): JSX.Element {
   return (
-    <>
-      <div className="title-container">
+    <RootContainer>
+      <TitleContainer>
         <h1>詰将棋盤</h1>
-        <div className="navigation">
+        <Navigation>
           <a href="https://github.com/wai-doi/tsumeshogi-ban/">
             <FaGithub />
           </a>
           <a href="https://github.com/wai-doi/tsumeshogi-ban/blob/main/README.md">
             <FaQuestionCircle />
           </a>
-        </div>
-      </div>
+        </Navigation>
+      </TitleContainer>
       <Game />
-    </>
+    </RootContainer>
   )
 }
 

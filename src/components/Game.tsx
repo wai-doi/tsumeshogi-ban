@@ -2,6 +2,7 @@ import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
 import { useState } from 'react'
 import { FaChessKing, FaEdit, FaEraser, FaTrash } from 'react-icons/fa'
+import { styled } from 'styled-components'
 
 import { ModeContext } from '../contexts/modeContext.ts'
 import { useCurrentPieces } from '../hooks/useCurrentPieces.ts'
@@ -12,7 +13,6 @@ import { useSavedPieces } from '../hooks/useSavedPieces.ts'
 
 import { Board } from './Board.tsx'
 import { ColumnNumbers } from './ColumnNumbers.tsx'
-import './Game.css'
 import { ModeButton } from './ModeButton.tsx'
 import { PieceBox } from './PieceBox.tsx'
 import { PieceStand } from './PieceStand.tsx'
@@ -20,6 +20,59 @@ import { RowNumbers } from './RowNumbers.tsx'
 import { StepButtonGroup } from './StepButtonGroup.tsx'
 
 import type { Mode, PromotePiece } from '../types.ts'
+
+const ModeButtonContainer = styled.div`
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 10px;
+  font-weight: bold;
+`
+
+const BoardContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+`
+
+const BoardAndRowNumbersDiv = styled.div`
+  display: flex;
+  gap: 2px;
+`
+
+const ButtonsAndStandDiv = styled.div`
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
+  width: 14rem;
+  margin-left: 20px;
+`
+
+const Buttons = styled.div`
+  display: flex;
+  flex-flow: column;
+`
+
+const CurrentMove = styled.div`
+  margin-bottom: 5px;
+  font-weight: bold;
+`
+
+const Button = styled.button`
+  width: 13rem;
+  height: 50px;
+  margin-bottom: 30px;
+  font-size: large;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 10px;
+`
+
+const SwitchModeButton = styled(Button)`
+  color: white;
+  background-color: rgb(31 75 140);
+`
 
 export function Game(): JSX.Element {
   const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()
@@ -115,21 +168,21 @@ export function Game(): JSX.Element {
   return (
     <>
       <ModeContext.Provider value={mode}>
-        <div className="mode-button-container">
+        <ModeButtonContainer>
           <ModeButton isActive={isEditing} onModeSwitch={handleSwitchToEdit}>
             <FaEdit /> 編集モード
           </ModeButton>
           <ModeButton isActive={isSolving} onModeSwitch={handleSwitchToSolve}>
             <FaChessKing /> 解答モード
           </ModeButton>
-        </div>
+        </ModeButtonContainer>
         <DndContext
           onDragStart={dragPieceStart}
           onDragEnd={dropPiece}
           sensors={sensors}
         >
-          <div className="board-container">
-            <div className="board-and-row-numbers">
+          <BoardContainer>
+            <BoardAndRowNumbersDiv>
               <div>
                 <ColumnNumbers />
                 <Board
@@ -143,38 +196,31 @@ export function Game(): JSX.Element {
                 />
               </div>
               <RowNumbers />
-            </div>
-            <div className="button-stand">
-              <div className="buttons">
+            </BoardAndRowNumbersDiv>
+            <ButtonsAndStandDiv>
+              <Buttons>
                 {isEditing && (
                   <>
-                    <button
-                      className="button switch-mode-button"
-                      onClick={handleSwitchToSolve}
-                    >
+                    <SwitchModeButton onClick={handleSwitchToSolve}>
                       <FaChessKing /> 保存して解答する
-                    </button>
-                    <button
-                      className="button"
+                    </SwitchModeButton>
+                    <Button
                       disabled={!savedPieces}
                       onClick={handleDeleteSavedBoard}
                     >
                       <FaTrash /> 保存した配置を消す
-                    </button>
-                    <button className="button" onClick={handleClearBoard}>
+                    </Button>
+                    <Button onClick={handleClearBoard}>
                       <FaEraser /> 配置をクリア
-                    </button>
+                    </Button>
                   </>
                 )}
                 {isSolving && (
                   <>
-                    <button
-                      className="button switch-mode-button"
-                      onClick={handleSwitchToEdit}
-                    >
+                    <SwitchModeButton onClick={handleSwitchToEdit}>
                       <FaEdit /> 盤面を編集する
-                    </button>
-                    <span className="current-move">{currentMove} 手目</span>
+                    </SwitchModeButton>
+                    <CurrentMove>{currentMove} 手目</CurrentMove>
                     <StepButtonGroup
                       onFirstStepBack={handleFirstStepBack}
                       onStepBack={handleStepBack}
@@ -185,10 +231,10 @@ export function Game(): JSX.Element {
                     />
                   </>
                 )}
-              </div>
+              </Buttons>
               <PieceStand pieces={piecesInStand} currentMove={currentMove} />
-            </div>
-          </div>
+            </ButtonsAndStandDiv>
+          </BoardContainer>
           <PieceBox pieces={piecesInBox} currentMove={currentMove} />
         </DndContext>
       </ModeContext.Provider>

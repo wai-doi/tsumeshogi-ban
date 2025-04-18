@@ -1,4 +1,5 @@
-import './Board.css'
+import { styled } from 'styled-components'
+
 import { Square } from './Square.tsx'
 import { Piece } from './pieces/Piece.tsx'
 
@@ -9,6 +10,16 @@ import type {
   PromoteHandler,
   PromotePiece,
 } from '../types.ts'
+
+const RowDiv = styled.div`
+  display: flex;
+  justify-content: center;
+`
+
+const BoardDiv = styled.div`
+  border: 5px solid #d38457;
+`
+
 interface BoardProps {
   currentPieces: PieceData[]
   onPieceFlip: PieceFlipHandler
@@ -35,7 +46,7 @@ export function Board({
 
   function renderRow(row: number): JSX.Element {
     return (
-      <div key={row} className="row">
+      <RowDiv key={row}>
         {[...Array(9)].map((_, col) => {
           const isPromotePiece =
             promotePiece && row === promotePiece.row && col === promotePiece.col
@@ -60,11 +71,9 @@ export function Board({
             </Square>
           )
         })}
-      </div>
+      </RowDiv>
     )
   }
 
-  return (
-    <div className="board">{[...Array(9)].map((_, row) => renderRow(row))}</div>
-  )
+  return <BoardDiv>{[...Array(9)].map((_, row) => renderRow(row))}</BoardDiv>
 }

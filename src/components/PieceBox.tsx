@@ -1,9 +1,31 @@
 import { useDroppable } from '@dnd-kit/core'
+import { styled } from 'styled-components'
 
-import './PieceBox.css'
 import { Piece } from './pieces/Piece.tsx'
 
 import type { PieceData, PieceKind } from '../types.ts'
+
+const PieceBoxDiv = styled.div`
+  display: flex;
+  justify-content: space-around;
+  padding: 5px 0;
+  background-color: bisque;
+  border-radius: 10px;
+`
+
+const PieceGroupDiv = styled.div`
+  display: grid;
+`
+
+const Overlay = styled.div`
+  grid-area: 1 / 1;
+`
+
+const PieceNumber = styled.span`
+  font-size: 20px;
+  font-weight: bold;
+  color: black;
+`
 
 interface PieceBoxProps {
   pieces: PieceData[]
@@ -37,19 +59,19 @@ export function PieceBox({ pieces, currentMove }: PieceBoxProps): JSX.Element {
   }
 
   return (
-    <div ref={setNodeRef} className="piece-box">
+    <PieceBoxDiv ref={setNodeRef} id="piece-box">
       {groupedPieces().map(({ kind, pieceArray }) => (
         <div key={kind}>
-          <div className="piece-group">
+          <PieceGroupDiv>
             {pieceArray.map((piece) => (
-              <div key={piece.id} className="overlay">
+              <Overlay key={piece.id}>
                 <Piece piece={piece} currentMove={currentMove} />
-              </div>
+              </Overlay>
             ))}
-          </div>
-          <span className="piece-number">✖️{pieceArray.length}</span>
+          </PieceGroupDiv>
+          <PieceNumber>✖️{pieceArray.length}</PieceNumber>
         </div>
       ))}
-    </div>
+    </PieceBoxDiv>
   )
 }

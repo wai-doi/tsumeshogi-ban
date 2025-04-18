@@ -4,8 +4,22 @@ import {
   FaAngleLeft,
   FaAngleRight,
 } from 'react-icons/fa'
+import { styled } from 'styled-components'
 
-import './StepButtonGroup.css'
+const StepButtonsDiv = styled.div`
+  display: flex;
+  gap: 5px;
+`
+
+const StepButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 40px;
+  font-size: large;
+  font-weight: bold;
+`
 
 interface StepButtonGroupProps {
   onFirstStepBack: () => void
@@ -25,39 +39,31 @@ export function StepButtonGroup({
   isLastMove,
 }: StepButtonGroupProps): JSX.Element {
   return (
-    <div className="step-buttons">
-      <button
+    <StepButtonsDiv>
+      <StepButton
         id="first-step-back"
-        className="step-button"
         onClick={onFirstStepBack}
         disabled={isFirstMove()}
       >
         <FaAngleDoubleLeft />
-      </button>
-      <button
-        id="step-back"
-        className="step-button"
-        onClick={onStepBack}
-        disabled={isFirstMove()}
-      >
+      </StepButton>
+      <StepButton id="step-back" onClick={onStepBack} disabled={isFirstMove()}>
         <FaAngleLeft />
-      </button>
-      <button
+      </StepButton>
+      <StepButton
         id="step-forward"
-        className="step-button"
         onClick={onStepForward}
         disabled={isLastMove()}
       >
         <FaAngleRight />
-      </button>
-      <button
+      </StepButton>
+      <StepButton
         id="last-step-forward"
-        className="step-button"
         onClick={onLastStepForward}
         disabled={isLastMove()}
       >
         <FaAngleDoubleRight />
-      </button>
-    </div>
+      </StepButton>
+    </StepButtonsDiv>
   )
 }

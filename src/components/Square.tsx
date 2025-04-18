@@ -1,10 +1,18 @@
 import { useDroppable } from '@dnd-kit/core'
 import { useContext } from 'react'
+import { styled } from 'styled-components'
 
 import { ModeContext } from '../contexts/modeContext.ts'
 
 import { PromoteModal } from './PromoteModal.tsx'
-import './Square.css'
+
+const SquareDiv = styled.div`
+  position: relative;
+  width: 60px;
+  height: 64px;
+  background-color: #efbf72;
+  border: 1px solid black;
+`
 
 import type {
   NotPromoteHandler,
@@ -60,12 +68,7 @@ export function Square({
 
   return (
     <>
-      <div
-        ref={setNodeRef}
-        id={`square-${shogiPosition}`}
-        className="square"
-        style={style}
-      >
+      <SquareDiv ref={setNodeRef} id={`square-${shogiPosition}`} style={style}>
         {children}
         {promotePiece && (
           <PromoteModal
@@ -74,7 +77,7 @@ export function Square({
             onNotPromote={onNotPromote}
           />
         )}
-      </div>
+      </SquareDiv>
     </>
   )
 }

@@ -10,7 +10,7 @@ test.beforeEach(async ({ page }) => {
 
 test('編集モードで駒箱の駒を駒台に動かせること', async ({ page }) => {
   const piece = page.locator(`#pawn-0`)
-  const stand = page.locator('.piece-stand')
+  const stand = page.locator('#piece-stand')
   await dragAndDrop(page, piece, stand)
 
   await expect(stand.locator('#pawn-0')).toBeVisible()
@@ -26,7 +26,7 @@ test('編集モードで駒箱の駒を盤に動かせること', async ({ page 
 
 test('編集モードで駒台の駒を駒箱に動かせること', async ({ page }) => {
   const piece = page.locator(`#pawn-0`)
-  const stand = page.locator('.piece-stand')
+  const stand = page.locator('#piece-stand')
   await dragAndDrop(page, piece, stand)
 
   await expect(stand.locator('#pawn-0')).toBeVisible()
@@ -40,12 +40,12 @@ test('編集モードで駒台の駒を駒箱に動かせること', async ({ pa
 
 test('編集モードで駒台の駒を盤に動かせること', async ({ page }) => {
   const piece = page.locator(`#pawn-0`)
-  const stand = page.locator('.piece-stand')
+  const stand = page.locator('#piece-stand')
   await dragAndDrop(page, piece, stand)
 
   await expect(stand.locator('#pawn-0')).toBeVisible()
 
-  const box = page.locator('.piece-box')
+  const box = page.locator('#piece-box')
   await dragAndDrop(page, piece, box)
 
   await expect(stand.locator('#pawn-0')).not.toBeVisible()
@@ -59,7 +59,7 @@ test('編集モードで盤の駒を駒箱に動かせること', async ({ page 
 
   await expect(square.locator('#pawn-0')).toBeVisible()
 
-  const box = page.locator('.piece-box')
+  const box = page.locator('#piece-box')
   await dragAndDrop(page, piece, box)
 
   await expect(square.locator('#pawn-0')).not.toBeVisible()
@@ -73,7 +73,7 @@ test('編集モードで盤の駒を駒台に動かせること', async ({ page 
 
   await expect(square.locator('#pawn-0')).toBeVisible()
 
-  const stand = page.locator('.piece-stand')
+  const stand = page.locator('#piece-stand')
   await dragAndDrop(page, piece, stand)
 
   await expect(square.locator('#pawn-0')).not.toBeVisible()
@@ -168,7 +168,7 @@ test('編集モードでクリアボタンを押すと盤面の駒がすべて�
 
   await expect(square_5_5.locator('#pawn-0')).not.toBeVisible()
   await expect(square_3_3.locator('#pawn-1')).not.toBeVisible()
-  const box = page.locator('.piece-box')
+  const box = page.locator('#piece-box')
   await expect(box.locator('#pawn-0')).toBeVisible()
   await expect(box.locator('#pawn-1')).toBeVisible()
 })
@@ -181,7 +181,7 @@ test('編集モードで盤面を編集して解答モードに切り替える�
   await dragAndDrop(page, piece1, square)
 
   const piece2 = page.locator(`#pawn-1`)
-  const stand = page.locator('.piece-stand')
+  const stand = page.locator('#piece-stand')
   await dragAndDrop(page, piece2, stand)
 
   await expect(square.locator('#pawn-0')).toBeVisible()
@@ -208,7 +208,7 @@ test('編集モードで盤面が保存された状態で、保存の削除を�
   await dragAndDrop(page, piece1, square)
 
   const piece2 = page.locator(`#pawn-1`)
-  const stand = page.locator('.piece-stand')
+  const stand = page.locator('#piece-stand')
   await dragAndDrop(page, piece2, stand)
 
   await expect(square.locator('#pawn-0')).toBeVisible()
