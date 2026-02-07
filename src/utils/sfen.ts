@@ -340,7 +340,7 @@ export function loadPiecesFromSfen(
     piece.row = null
     piece.col = null
     piece.promoted = false
-    piece.opposite = handPiece.opposite
+    piece.opposite = false
   })
 
   return { ok: true, pieces: nextPieces }

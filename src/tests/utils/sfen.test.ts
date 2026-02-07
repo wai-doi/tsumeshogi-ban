@@ -67,7 +67,7 @@ test('盤面の駒配置と成り・向きが正しく反映されること', ()
 })
 
 test('持ち駒が先手は駒台、後手は駒箱に反映されること', () => {
-  const sfen = '9/9/9/9/9/9/9/9/9 b 2GS2p'
+  const sfen = '9/9/9/9/9/9/9/9/9 b 2GSRr'
   const result = loadPiecesFromSfen(sfen, generatePieces())
 
   expect(result).toEqual(
@@ -92,11 +92,18 @@ test('持ち駒が先手は駒台、後手は駒箱に反映されること', ()
   )
   expect(standSilver).toHaveLength(1)
 
-  const boxWhitePawn = pieces.filter(
-    (piece) => piece.place === 'box' && piece.kind === 'pawn' && piece.opposite,
+  const standRook = pieces.filter(
+    (piece) => piece.place === 'stand' && piece.kind === 'rook',
   )
-  expect(boxWhitePawn).toHaveLength(2)
-  expect(boxWhitePawn.every((piece) => !piece.promoted)).toBe(true)
+  expect(standRook).toHaveLength(1)
+
+  const boxRook = pieces.filter(
+    (piece) => piece.place === 'box' && piece.kind === 'rook',
+  )
+  expect(boxRook).toHaveLength(1)
+  expect(boxRook.every((piece) => !piece.opposite && !piece.promoted)).toBe(
+    true,
+  )
 })
 
 test('4項目SFENを受理して盤面反映できること', () => {
