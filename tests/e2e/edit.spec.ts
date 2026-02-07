@@ -233,3 +233,46 @@ test('編集モードで盤面が保存された状態で、保存の削除を�
   await expect(square.locator('#pawn-0')).not.toBeVisible()
   await expect(stand.locator('#pawn-1')).not.toBeVisible()
 })
+
+test('編集モードでSFENを読込すると盤上に駒が配置されること', async ({
+  page,
+}) => {
+  await page.locator('#sfen-input').fill('7ks/5+P3/9/9/9/9/9/9/9 b -')
+  await page.locator('#load-sfen-button').click()
+
+  const whiteKing = page.locator('#square-2-1 [id^="king-"]').first()
+  const whiteSilver = page.locator('#square-1-1 [id^="silver-"]').first()
+  const promotedPawn = page.locator('#square-4-2 [id^="pawn-"]').first()
+
+  await expect(whiteKing).toBeVisible()
+  await expect(whiteKing).toHaveAttribute('src', /white_king2\.png/)
+  await expect(whiteSilver).toBeVisible()
+  await expect(whiteSilver).toHaveAttribute('src', /white_silver\.png/)
+  await expect(promotedPawn).toBeVisible()
+  await expect(promotedPawn).toHaveAttribute('src', /black_prom_pawn\.png/)
+})
+
+test('編集モードでSFENの先手持ち駒が駒台に配置されること', async ({ page }) => {
+  await page.locator('#sfen-input').fill('9/9/9/9/9/9/9/9/9 b GS')
+  await page.locator('#load-sfen-button').click()
+
+  const stand = page.locator('#piece-stand')
+  await expect(stand.locator('[id^="gold-"]')).toHaveCount(1)
+  await expect(stand.locator('[id^="silver-"]')).toHaveCount(1)
+})
+
+test('編集モードで不正なSFENを読込するとエラー表示され盤面が変わらないこと', async ({
+  page,
+}) => {
+  await page.locator('#sfen-input').fill('9/9/9/9/4P4/9/9/9/9 b -')
+  await page.locator('#load-sfen-button').click()
+
+  const square = page.locator('#square-5-5')
+  await expect(square.locator('[id^="pawn-"]')).toHaveCount(1)
+
+  await page.locator('#sfen-input').fill('9/9/9/9/4P4/9/9/9 b -')
+  await page.locator('#load-sfen-button').click()
+
+  await expect(page.locator('#sfen-error')).toBeVisible()
+  await expect(square.locator('[id^="pawn-"]')).toHaveCount(1)
+})

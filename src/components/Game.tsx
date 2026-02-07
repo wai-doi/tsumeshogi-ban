@@ -10,6 +10,7 @@ import { useMovePiece } from '../hooks/useMovePiece.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
 import { usePromotePiece } from '../hooks/usePromotePiece.ts'
 import { useSavedPieces } from '../hooks/useSavedPieces.ts'
+import { loadPiecesFromSfen } from '../utils/sfen.ts'
 
 import { Board } from './Board.tsx'
 import { ColumnNumbers } from './ColumnNumbers.tsx'
@@ -17,6 +18,7 @@ import { ModeButton } from './ModeButton.tsx'
 import { PieceBox } from './PieceBox.tsx'
 import { PieceStand } from './PieceStand.tsx'
 import { RowNumbers } from './RowNumbers.tsx'
+import { SfenLoader } from './SfenLoader.tsx'
 import { StepButtonGroup } from './StepButtonGroup.tsx'
 
 import type { Mode, PromotePiece } from '../types.ts'
@@ -51,6 +53,16 @@ const ButtonsAndStandDiv = styled.div`
 const Buttons = styled.div`
   display: flex;
   flex-flow: column;
+`
+
+const EditButtons = styled.div`
+  display: flex;
+  flex-flow: column;
+  gap: 15px;
+
+  button {
+    margin-bottom: 0;
+  }
 `
 
 const CurrentMove = styled.div`
@@ -165,6 +177,18 @@ export function Game(): JSX.Element {
     setPromotePiece(null)
   }
 
+  function handleLoadSfen(sfenInput: string): string | null {
+    const result = loadPiecesFromSfen(sfenInput, currentPieces)
+
+    if ('error' in result) {
+      return result.error
+    }
+
+    setCurrentPieces(result.pieces)
+    setPromotePiece(null)
+    return null
+  }
+
   return (
     <>
       <ModeContext.Provider value={mode}>
@@ -198,9 +222,10 @@ export function Game(): JSX.Element {
               <RowNumbers />
             </BoardAndRowNumbersDiv>
             <ButtonsAndStandDiv>
+              {isEditing && <SfenLoader onLoadSfen={handleLoadSfen} />}
               <Buttons>
                 {isEditing && (
-                  <>
+                  <EditButtons>
                     <SwitchModeButton onClick={handleSwitchToSolve}>
                       <FaChessKing /> 保存して解答する
                     </SwitchModeButton>
@@ -213,7 +238,7 @@ export function Game(): JSX.Element {
                     <Button onClick={handleClearBoard}>
                       <FaEraser /> 配置をクリア
                     </Button>
-                  </>
+                  </EditButtons>
                 )}
                 {isSolving && (
                   <>
