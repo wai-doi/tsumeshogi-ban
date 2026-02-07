@@ -38,7 +38,7 @@ function App(): JSX.Element {
           <a href="https://github.com/wai-doi/tsumeshogi-ban/">
             <FaGithub />
           </a>
-          <a href="https://github.com/wai-doi/tsumeshogi-ban/blob/main/README.md">
+          <a href="https://github.com/wai-doi/tsumeshogi-ban/blob/main/docs/usage.md">
             <FaQuestionCircle />
           </a>
         </Navigation>
