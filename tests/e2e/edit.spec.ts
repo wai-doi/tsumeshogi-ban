@@ -252,6 +252,40 @@ test('編集モードでSFENを読込すると盤上に駒が配置されるこ�
   await expect(promotedPawn).toHaveAttribute('src', /black_prom_pawn\.png/)
 })
 
+test('編集モードでSFENを読込するとURLクエリにsfenが反映されること', async ({
+  page,
+}) => {
+  const sfen = '7ks/5+P3/9/9/9/9/9/9/9 b -'
+
+  await page.locator('#sfen-input').fill(sfen)
+  await page.locator('#load-sfen-button').click()
+
+  await expect(async () => {
+    const sfenInQuery = await page.evaluate(() => {
+      return new URL(window.location.href).searchParams.get('sfen')
+    })
+
+    expect(sfenInQuery).toBe(sfen)
+  }).toPass()
+})
+
+test('sfenクエリ付きアクセスでSFEN入力欄と盤面へ反映されること', async ({
+  page,
+}) => {
+  const sfen = '7ks/5+P3/9/9/9/9/9/9/9 b -'
+  await page.goto(`/?sfen=${encodeURIComponent(sfen)}`)
+
+  await expect(page.locator('#sfen-input')).toHaveValue(sfen)
+
+  const whiteKing = page.locator('#square-2-1 [id^="king-"]').first()
+  const whiteSilver = page.locator('#square-1-1 [id^="silver-"]').first()
+  const promotedPawn = page.locator('#square-4-2 [id^="pawn-"]').first()
+
+  await expect(whiteKing).toBeVisible()
+  await expect(whiteSilver).toBeVisible()
+  await expect(promotedPawn).toBeVisible()
+})
+
 test('編集モードでSFENの先手持ち駒が駒台に配置されること', async ({ page }) => {
   await page.locator('#sfen-input').fill('9/9/9/9/9/9/9/9/9 b GS')
   await page.locator('#load-sfen-button').click()

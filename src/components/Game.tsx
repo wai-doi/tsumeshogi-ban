@@ -1,6 +1,6 @@
 import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
-import { useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { FaChessKing, FaEdit, FaEraser, FaTrash } from 'react-icons/fa'
 import { styled } from 'styled-components'
 
@@ -86,11 +86,26 @@ const SwitchModeButton = styled(Button)`
   background-color: rgb(31 75 140);
 `
 
+function getSfenFromQuery(): string | null {
+  const searchParams = new URLSearchParams(window.location.search)
+  return searchParams.get('sfen')
+}
+
+function setSfenToQuery(sfen: string): void {
+  const url = new URL(window.location.href)
+  url.searchParams.set('sfen', sfen)
+
+  const nextPath = `${url.pathname}${url.search}${url.hash}`
+  window.history.replaceState(null, '', nextPath)
+}
+
 export function Game(): JSX.Element {
   const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()
   const { currentPieces, setCurrentPieces, clearCurrentPieces } =
     useCurrentPieces(savedPieces)
   const [mode, setMode] = useState<Mode>('edit')
+  const [sfenInput, setSfenInput] = useState<string>('')
+  const hasLoadedSfenFromQuery = useRef<boolean>(false)
 
   const [promotePiece, setPromotePiece] = useState<PromotePiece | null>(null)
 
@@ -141,6 +156,39 @@ export function Game(): JSX.Element {
     (piece) => piece.place === 'box' && !(isSolving && piece.kind === 'king'),
   )
 
+  const loadSfen = useCallback(
+    (inputSfen: string, shouldUpdateQuery: boolean): string | null => {
+      const normalizedSfen = inputSfen.trim()
+      const result = loadPiecesFromSfen(normalizedSfen, currentPieces)
+
+      if ('error' in result) {
+        return result.error
+      }
+
+      setCurrentPieces(result.pieces)
+      setSfenInput(normalizedSfen)
+      setPromotePiece(null)
+
+      if (shouldUpdateQuery) {
+        setSfenToQuery(normalizedSfen)
+      }
+
+      return null
+    },
+    [currentPieces, setCurrentPieces],
+  )
+
+  useEffect(() => {
+    if (hasLoadedSfenFromQuery.current) return
+    hasLoadedSfenFromQuery.current = true
+
+    const sfenInQuery = getSfenFromQuery()
+    if (!sfenInQuery) return
+
+    setSfenInput(sfenInQuery)
+    loadSfen(sfenInQuery, false)
+  }, [loadSfen])
+
   function handleSwitchToSolve(): void {
     if (isSolving) return
 
@@ -178,15 +226,7 @@ export function Game(): JSX.Element {
   }
 
   function handleLoadSfen(sfenInput: string): string | null {
-    const result = loadPiecesFromSfen(sfenInput, currentPieces)
-
-    if ('error' in result) {
-      return result.error
-    }
-
-    setCurrentPieces(result.pieces)
-    setPromotePiece(null)
-    return null
+    return loadSfen(sfenInput, true)
   }
 
   return (
@@ -222,7 +262,13 @@ export function Game(): JSX.Element {
               <RowNumbers />
             </BoardAndRowNumbersDiv>
             <ButtonsAndStandDiv>
-              {isEditing && <SfenLoader onLoadSfen={handleLoadSfen} />}
+              {isEditing && (
+                <SfenLoader
+                  onLoadSfen={handleLoadSfen}
+                  onSfenInputChange={setSfenInput}
+                  sfenInput={sfenInput}
+                />
+              )}
               <Buttons>
                 {isEditing && (
                   <EditButtons>

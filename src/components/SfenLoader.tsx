@@ -48,16 +48,21 @@ const SfenError = styled.p<{ $visible: boolean }>`
 
 interface SfenLoaderProps {
   onLoadSfen: (sfen: string) => string | null
+  onSfenInputChange: (sfen: string) => void
+  sfenInput: string
 }
 
-export function SfenLoader({ onLoadSfen }: SfenLoaderProps): JSX.Element {
-  const [sfenInput, setSfenInput] = useState<string>('')
+export function SfenLoader({
+  onLoadSfen,
+  onSfenInputChange,
+  sfenInput,
+}: SfenLoaderProps): JSX.Element {
   const [sfenError, setSfenError] = useState<string | null>(null)
 
   function handleChangeSfenInput(
     event: React.ChangeEvent<HTMLInputElement>,
   ): void {
-    setSfenInput(event.target.value)
+    onSfenInputChange(event.target.value)
     if (sfenError) setSfenError(null)
   }
 
