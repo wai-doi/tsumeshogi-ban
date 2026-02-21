@@ -27,9 +27,23 @@ const SfenLoadButton = styled.button`
   box-sizing: border-box;
   width: 100%;
   height: 38px;
+  margin-bottom: 8px;
   padding: 0 8px;
   color: white;
   background-color: rgb(31 75 140);
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+`
+
+const SfenGenerateButton = styled.button`
+  box-sizing: border-box;
+  width: 100%;
+  height: 38px;
+  padding: 0 8px;
+  color: white;
+  background-color: rgb(63 122 63);
   border-radius: 6px;
   font-size: 13px;
   font-weight: bold;
@@ -47,12 +61,14 @@ const SfenError = styled.p<{ $visible: boolean }>`
 `
 
 interface SfenLoaderProps {
+  onGenerateSfen: () => void
   onLoadSfen: (sfen: string) => string | null
   onSfenInputChange: (sfen: string) => void
   sfenInput: string
 }
 
 export function SfenLoader({
+  onGenerateSfen,
   onLoadSfen,
   onSfenInputChange,
   sfenInput,
@@ -95,6 +111,9 @@ export function SfenLoader({
       <SfenLoadButton id="load-sfen-button" onClick={handleLoadSfen}>
         読込
       </SfenLoadButton>
+      <SfenGenerateButton id="generate-sfen-button" onClick={onGenerateSfen}>
+        SFEN取得
+      </SfenGenerateButton>
       <SfenError id="sfen-error" role="alert" $visible={!!sfenError}>
         {sfenError || ''}
       </SfenError>

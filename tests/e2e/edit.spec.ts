@@ -295,6 +295,25 @@ test('編集モードでSFENの先手持ち駒が駒台に配置されること'
   await expect(stand.locator('[id^="silver-"]')).toHaveCount(1)
 })
 
+test('編集モードで並べた盤面からSFENを取得して入力欄に表示できること', async ({
+  page,
+}) => {
+  const pawn = page.locator('#pawn-0')
+  const square = page.locator('#square-5-5')
+  await dragAndDrop(page, pawn, square)
+
+  const gold = page.locator('#gold-0')
+  const stand = page.locator('#piece-stand')
+  await dragAndDrop(page, gold, stand)
+
+  // DnD直後はクリックが効かない場合があるため待機
+  await page.waitForTimeout(100)
+  await page.locator('#generate-sfen-button').click()
+  await expect(page.locator('#sfen-input')).toHaveValue(
+    '9/9/9/9/4P4/9/9/9/9 b G',
+  )
+})
+
 test('編集モードで不正なSFENを読込するとエラー表示され盤面が変わらないこと', async ({
   page,
 }) => {

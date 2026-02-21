@@ -71,6 +71,27 @@ const kindLabel: Record<PieceKind, string> = {
   king: '玉',
 }
 
+const pieceToSfenCharMap: Record<PieceKind, string> = {
+  pawn: 'P',
+  lance: 'L',
+  knight: 'N',
+  silver: 'S',
+  gold: 'G',
+  bishop: 'B',
+  rook: 'R',
+  king: 'K',
+}
+
+const handPieceOrder: PieceKind[] = [
+  'rook',
+  'bishop',
+  'gold',
+  'silver',
+  'knight',
+  'lance',
+  'pawn',
+]
+
 function parsePieceKind(char: string): PieceKind | null {
   return sfenPieceMap[char.toUpperCase()] || null
 }
@@ -344,4 +365,91 @@ export function loadPiecesFromSfen(
   })
 
   return { ok: true, pieces: nextPieces }
+}
+
+function toBoardToken(currentPieces: PieceData[]): string {
+  const boardPieces = currentPieces.filter((piece) => piece.place === 'board')
+  const boardMap = new Map<string, PieceData>()
+
+  boardPieces.forEach((piece) => {
+    boardMap.set(`${piece.row}-${piece.col}`, piece)
+  })
+
+  const rows: string[] = []
+
+  for (let row = 0; row < 9; row += 1) {
+    let rowToken = ''
+    let emptyCount = 0
+
+    for (let col = 0; col < 9; col += 1) {
+      const piece = boardMap.get(`${row}-${col}`)
+
+      if (!piece) {
+        emptyCount += 1
+        continue
+      }
+
+      if (emptyCount > 0) {
+        rowToken += String(emptyCount)
+        emptyCount = 0
+      }
+
+      const pieceChar = pieceToSfenCharMap[piece.kind]
+      const sideChar = piece.opposite ? pieceChar.toLowerCase() : pieceChar
+
+      if (piece.promoted) rowToken += '+'
+      rowToken += sideChar
+    }
+
+    if (emptyCount > 0) {
+      rowToken += String(emptyCount)
+    }
+
+    rows.push(rowToken)
+  }
+
+  return rows.join('/')
+}
+
+function toHandsToken(currentPieces: PieceData[]): string {
+  const handCount: Record<string, number> = {}
+
+  currentPieces.forEach((piece) => {
+    if (piece.place === 'stand') {
+      const char = pieceToSfenCharMap[piece.kind]
+      handCount[char] = (handCount[char] || 0) + 1
+    }
+
+    if (piece.place === 'box' && piece.opposite) {
+      const char = pieceToSfenCharMap[piece.kind].toLowerCase()
+      handCount[char] = (handCount[char] || 0) + 1
+    }
+  })
+
+  let token = ''
+
+  handPieceOrder.forEach((kind) => {
+    const char = pieceToSfenCharMap[kind]
+    const count = handCount[char] || 0
+
+    if (count <= 0) return
+    token += count > 1 ? `${count}${char}` : char
+  })
+
+  handPieceOrder.forEach((kind) => {
+    const char = pieceToSfenCharMap[kind].toLowerCase()
+    const count = handCount[char] || 0
+
+    if (count <= 0) return
+    token += count > 1 ? `${count}${char}` : char
+  })
+
+  return token || '-'
+}
+
+export function toSfen(currentPieces: PieceData[]): string {
+  const boardToken = toBoardToken(currentPieces)
+  const handsToken = toHandsToken(currentPieces)
+
+  return `${boardToken} b ${handsToken}`
 }

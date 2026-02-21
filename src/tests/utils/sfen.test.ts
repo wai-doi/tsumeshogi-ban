@@ -1,4 +1,4 @@
-import { loadPiecesFromSfen } from '../../utils/sfen.ts'
+import { loadPiecesFromSfen, toSfen } from '../../utils/sfen.ts'
 
 import type { PieceData, PieceKind } from '../../types.ts'
 
@@ -185,4 +185,40 @@ test('利用可能枚数を超える駒を指定したSFENはエラーになる�
   if (!('error' in result)) throw new Error('expected error')
 
   expect(result.error).toContain('上限を超えています')
+})
+
+test('盤面と駒台からSFEN文字列を生成できること', () => {
+  const pieces = generatePieces()
+
+  const silver = pieces.find((piece) => piece.id === 'silver-0')
+  if (!silver) throw new Error('silver-0 not found')
+  silver.place = 'board'
+  silver.row = 0
+  silver.col = 8
+  silver.opposite = true
+
+  const promotedPawn = pieces.find((piece) => piece.id === 'pawn-0')
+  if (!promotedPawn) throw new Error('pawn-0 not found')
+  promotedPawn.place = 'board'
+  promotedPawn.row = 1
+  promotedPawn.col = 5
+  promotedPawn.promoted = true
+  promotedPawn.opposite = false
+
+  const pawn = pieces.find((piece) => piece.id === 'pawn-1')
+  if (!pawn) throw new Error('pawn-1 not found')
+  pawn.place = 'board'
+  pawn.row = 4
+  pawn.col = 4
+  pawn.opposite = false
+
+  const rook = pieces.find((piece) => piece.id === 'rook-0')
+  if (!rook) throw new Error('rook-0 not found')
+  rook.place = 'stand'
+
+  const gold = pieces.find((piece) => piece.id === 'gold-0')
+  if (!gold) throw new Error('gold-0 not found')
+  gold.place = 'stand'
+
+  expect(toSfen(pieces)).toBe('8s/5+P3/9/9/4P4/9/9/9/9 b RG')
 })

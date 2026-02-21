@@ -10,7 +10,7 @@ import { useMovePiece } from '../hooks/useMovePiece.ts'
 import { usePiecesHistory } from '../hooks/usePiecesHistory.ts'
 import { usePromotePiece } from '../hooks/usePromotePiece.ts'
 import { useSavedPieces } from '../hooks/useSavedPieces.ts'
-import { loadPiecesFromSfen } from '../utils/sfen.ts'
+import { loadPiecesFromSfen, toSfen } from '../utils/sfen.ts'
 
 import { Board } from './Board.tsx'
 import { ColumnNumbers } from './ColumnNumbers.tsx'
@@ -229,6 +229,11 @@ export function Game(): JSX.Element {
     return loadSfen(sfenInput, true)
   }
 
+  function handleGenerateSfen(): void {
+    const generatedSfen = toSfen(currentPieces)
+    setSfenInput(generatedSfen)
+  }
+
   return (
     <>
       <ModeContext.Provider value={mode}>
@@ -265,6 +270,7 @@ export function Game(): JSX.Element {
               {isEditing && (
                 <SfenLoader
                   onLoadSfen={handleLoadSfen}
+                  onGenerateSfen={handleGenerateSfen}
                   onSfenInputChange={setSfenInput}
                   sfenInput={sfenInput}
                 />
