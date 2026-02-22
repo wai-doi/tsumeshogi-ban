@@ -32,7 +32,7 @@ TypeScript の型（`type` / `interface`）を明示し、React は関数コン�
 ロジック変更時は Jest のユニットテストを追加し、ユーザー操作（ドラッグ&ドロップ、モード切替、保存復元）の変更時は Playwright の E2E テストを追加します。既存の `beforeEach` や振る舞いベースのテスト名に合わせてください。
 PR 前の推奨実行:
 
-`npm run lint:eslint && npm run lint:stylelint && npm run test && npm run e2e`
+`npm run format && npm run lint:eslint && npm run lint:stylelint && npm run test && npm run e2e`
 
 ## コミットとプルリクエスト
 
