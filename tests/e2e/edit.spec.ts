@@ -295,23 +295,43 @@ test('編集モードでSFENの先手持ち駒が駒台に配置されること'
   await expect(stand.locator('[id^="silver-"]')).toHaveCount(1)
 })
 
-test('編集モードで並べた盤面からSFENを取得して入力欄に表示できること', async ({
+test('編集モードで共有URLをコピーするとsfen付きURLがクリップボードに入ること', async ({
   page,
 }) => {
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: async (text: string) => {
+          ;(window as typeof window & { __copiedText?: string }).__copiedText =
+            text
+        },
+      },
+    })
+  })
+
   const pawn = page.locator('#pawn-0')
   const square = page.locator('#square-5-5')
   await dragAndDrop(page, pawn, square)
 
-  const gold = page.locator('#gold-0')
-  const stand = page.locator('#piece-stand')
-  await dragAndDrop(page, gold, stand)
-
   // DnD直後はクリックが効かない場合があるため待機
   await page.waitForTimeout(100)
-  await page.locator('#generate-sfen-button').click()
-  await expect(page.locator('#sfen-input')).toHaveValue(
-    '9/9/9/9/4P4/9/9/9/9 b G',
+  await page.locator('#copy-share-url-button').click()
+  await expect(page.locator('#sfen-input')).toHaveValue('')
+
+  await expect(page.locator('#sfen-message')).toHaveText(
+    '共有用URLをコピーしました',
   )
+
+  await page.waitForTimeout(3200)
+  await expect(page.locator('#sfen-message')).not.toBeVisible()
+
+  const copiedText = await page.evaluate(() => {
+    return (window as typeof window & { __copiedText?: string }).__copiedText
+  })
+
+  const copiedUrl = new URL(copiedText!)
+  expect(copiedUrl.searchParams.get('sfen')).toBe('9/9/9/9/4P4/9/9/9/9 b -')
 })
 
 test('編集モードで不正なSFENを読込するとエラー表示され盤面が変わらないこと', async ({
@@ -326,6 +346,41 @@ test('編集モードで不正なSFENを読込するとエラー表示され盤�
   await page.locator('#sfen-input').fill('9/9/9/9/4P4/9/9/9 b -')
   await page.locator('#load-sfen-button').click()
 
-  await expect(page.locator('#sfen-error')).toBeVisible()
+  await expect(page.locator('#sfen-message')).toHaveText(
+    '盤面は9段で指定してください',
+  )
   await expect(square.locator('[id^="pawn-"]')).toHaveCount(1)
+})
+
+test('SFENエラーと共有コピー結果が同じ場所で上書き表示されること', async ({
+  page,
+}) => {
+  await page.evaluate(() => {
+    Object.defineProperty(navigator, 'clipboard', {
+      configurable: true,
+      value: {
+        writeText: async (text: string) => {
+          ;(window as typeof window & { __copiedText?: string }).__copiedText =
+            text
+        },
+      },
+    })
+  })
+
+  await page.locator('#sfen-input').fill('9/9/9/9/4P4/9/9/9 b -')
+  await page.locator('#load-sfen-button').click()
+  await expect(page.locator('#sfen-message')).toHaveText(
+    '盤面は9段で指定してください',
+  )
+
+  await page.locator('#copy-share-url-button').click()
+  await expect(page.locator('#sfen-message')).toHaveText(
+    '共有用URLをコピーしました',
+  )
+
+  await page.locator('#sfen-input').fill('9/9/9/9/4P4/9/9/9 b -')
+  await page.locator('#load-sfen-button').click()
+  await expect(page.locator('#sfen-message')).toHaveText(
+    '盤面は9段で指定してください',
+  )
 })

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { styled } from 'styled-components'
 
 const SfenLoadContainer = styled.div`
@@ -37,54 +37,87 @@ const SfenLoadButton = styled.button`
   cursor: pointer;
 `
 
-const SfenGenerateButton = styled.button`
+const ShareUrlCopyButton = styled.button`
   box-sizing: border-box;
   width: 100%;
   height: 38px;
   padding: 0 8px;
   color: white;
-  background-color: rgb(63 122 63);
+  background-color: rgb(43 109 133);
   border-radius: 6px;
   font-size: 13px;
   font-weight: bold;
   cursor: pointer;
 `
 
-const SfenError = styled.p<{ $visible: boolean }>`
+const Message = styled.p<{ $isError: boolean; $visible: boolean }>`
   height: 36px;
   margin: 4px 0 0;
   font-size: 12px;
   line-height: 18px;
-  color: #f55;
+  color: ${({ $isError }): string => ($isError ? '#f55' : '#4da255')};
   overflow-y: auto;
   visibility: ${({ $visible }): string => ($visible ? 'visible' : 'hidden')};
 `
 
 interface SfenLoaderProps {
-  onGenerateSfen: () => void
+  onCopyShareUrl: () => Promise<string | null>
   onLoadSfen: (sfen: string) => string | null
   onSfenInputChange: (sfen: string) => void
   sfenInput: string
 }
 
+const copyResultDisplayMs = 3000
+
 export function SfenLoader({
-  onGenerateSfen,
+  onCopyShareUrl,
   onLoadSfen,
   onSfenInputChange,
   sfenInput,
 }: SfenLoaderProps): JSX.Element {
-  const [sfenError, setSfenError] = useState<string | null>(null)
+  const [message, setMessage] = useState<string>('')
+  const [messageIsError, setMessageIsError] = useState<boolean>(false)
+
+  useEffect((): void | (() => void) => {
+    if (!message || messageIsError) return
+
+    const timeoutId = window.setTimeout(() => {
+      setMessage('')
+    }, copyResultDisplayMs)
+
+    return (): void => {
+      window.clearTimeout(timeoutId)
+    }
+  }, [message, messageIsError])
 
   function handleChangeSfenInput(
     event: React.ChangeEvent<HTMLInputElement>,
   ): void {
     onSfenInputChange(event.target.value)
-    if (sfenError) setSfenError(null)
+    if (messageIsError && message) setMessage('')
   }
 
   function handleLoadSfen(): void {
     const error = onLoadSfen(sfenInput)
-    setSfenError(error)
+    if (error) {
+      setMessage(error)
+      setMessageIsError(true)
+      return
+    }
+
+    setMessage('')
+  }
+
+  async function handleCopyShareUrl(): Promise<void> {
+    const error = await onCopyShareUrl()
+    if (error) {
+      setMessage(error)
+      setMessageIsError(true)
+      return
+    }
+
+    setMessage('共有用URLをコピーしました')
+    setMessageIsError(false)
   }
 
   function handleKeyDownSfenInput(
@@ -111,12 +144,20 @@ export function SfenLoader({
       <SfenLoadButton id="load-sfen-button" onClick={handleLoadSfen}>
         読込
       </SfenLoadButton>
-      <SfenGenerateButton id="generate-sfen-button" onClick={onGenerateSfen}>
-        SFEN取得
-      </SfenGenerateButton>
-      <SfenError id="sfen-error" role="alert" $visible={!!sfenError}>
-        {sfenError || ''}
-      </SfenError>
+      <ShareUrlCopyButton
+        id="copy-share-url-button"
+        onClick={() => void handleCopyShareUrl()}
+      >
+        共有URLをコピー
+      </ShareUrlCopyButton>
+      <Message
+        id="sfen-message"
+        role={messageIsError ? 'alert' : 'status'}
+        $visible={!!message}
+        $isError={messageIsError}
+      >
+        {message}
+      </Message>
     </SfenLoadContainer>
   )
 }

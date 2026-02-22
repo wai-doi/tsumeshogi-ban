@@ -99,6 +99,28 @@ function setSfenToQuery(sfen: string): void {
   window.history.replaceState(null, '', nextPath)
 }
 
+function toSfenUrl(sfen: string): URL {
+  const url = new URL(window.location.href)
+  url.searchParams.set('sfen', sfen)
+  return url
+}
+
+function copyTextByExecCommand(text: string): boolean {
+  const textArea = document.createElement('textarea')
+  textArea.value = text
+  textArea.style.position = 'fixed'
+  textArea.style.top = '-9999px'
+
+  document.body.appendChild(textArea)
+  textArea.focus()
+  textArea.select()
+
+  const copied = document.execCommand('copy')
+  document.body.removeChild(textArea)
+
+  return copied
+}
+
 export function Game(): JSX.Element {
   const { savedPieces, savePieces, deleteSavedPieces } = useSavedPieces()
   const { currentPieces, setCurrentPieces, clearCurrentPieces } =
@@ -229,9 +251,21 @@ export function Game(): JSX.Element {
     return loadSfen(sfenInput, true)
   }
 
-  function handleGenerateSfen(): void {
-    const generatedSfen = toSfen(currentPieces)
-    setSfenInput(generatedSfen)
+  async function handleCopyShareUrl(): Promise<string | null> {
+    const sfen = toSfen(currentPieces)
+    const shareUrl = toSfenUrl(sfen).toString()
+
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(shareUrl)
+      } else if (!copyTextByExecCommand(shareUrl)) {
+        return 'コピーに失敗しました'
+      }
+    } catch {
+      return 'コピーに失敗しました'
+    }
+
+    return null
   }
 
   return (
@@ -269,8 +303,8 @@ export function Game(): JSX.Element {
             <ButtonsAndStandDiv>
               {isEditing && (
                 <SfenLoader
+                  onCopyShareUrl={handleCopyShareUrl}
                   onLoadSfen={handleLoadSfen}
-                  onGenerateSfen={handleGenerateSfen}
                   onSfenInputChange={setSfenInput}
                   sfenInput={sfenInput}
                 />
