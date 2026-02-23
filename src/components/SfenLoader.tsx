@@ -31,10 +31,23 @@ const SfenLoadButton = styled.button`
   padding: 0 8px;
   color: white;
   background-color: rgb(31 75 140);
+  border: 1px solid rgb(31 75 140);
   border-radius: 6px;
   font-size: 13px;
   font-weight: bold;
   cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background-color: rgb(38 89 163);
+    border-color: rgb(62 120 203);
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 16%);
+    transform: translateY(-1px);
+  }
 `
 
 const ShareUrlCopyButton = styled.button`
@@ -44,10 +57,23 @@ const ShareUrlCopyButton = styled.button`
   padding: 0 8px;
   color: white;
   background-color: rgb(43 109 133);
+  border: 1px solid rgb(43 109 133);
   border-radius: 6px;
   font-size: 13px;
   font-weight: bold;
   cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover {
+    background-color: rgb(53 130 158);
+    border-color: rgb(76 156 185);
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 16%);
+    transform: translateY(-1px);
+  }
 `
 
 const Message = styled.p<{ $isError: boolean; $visible: boolean }>`

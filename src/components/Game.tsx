@@ -1,7 +1,7 @@
 import { DndContext, PointerSensor, useSensor, useSensors } from '@dnd-kit/core'
 import { isEqual } from 'lodash'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { FaChessKing, FaEdit, FaEraser, FaTrash } from 'react-icons/fa'
+import { FaEdit, FaEraser, FaPlay, FaTrash } from 'react-icons/fa'
 import { styled } from 'styled-components'
 
 import { ModeContext } from '../contexts/modeContext.ts'
@@ -14,7 +14,6 @@ import { loadPiecesFromSfen, toSfen } from '../utils/sfen.ts'
 
 import { Board } from './Board.tsx'
 import { ColumnNumbers } from './ColumnNumbers.tsx'
-import { ModeButton } from './ModeButton.tsx'
 import { PieceBox } from './PieceBox.tsx'
 import { PieceStand } from './PieceStand.tsx'
 import { RowNumbers } from './RowNumbers.tsx'
@@ -23,18 +22,10 @@ import { StepButtonGroup } from './StepButtonGroup.tsx'
 
 import type { Mode, PromotePiece } from '../types.ts'
 
-const ModeButtonContainer = styled.div`
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  margin-bottom: 10px;
-  font-weight: bold;
-`
-
 const BoardContainer = styled.div`
   display: flex;
   justify-content: center;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `
 
 const BoardAndRowNumbersDiv = styled.div`
@@ -45,7 +36,6 @@ const BoardAndRowNumbersDiv = styled.div`
 const ButtonsAndStandDiv = styled.div`
   display: flex;
   flex-flow: column;
-  justify-content: space-between;
   width: 14rem;
   margin-left: 20px;
 `
@@ -55,14 +45,41 @@ const Buttons = styled.div`
   flex-flow: column;
 `
 
+const PieceStandContainer = styled.div`
+  margin-top: auto;
+`
+
+const SfenLoaderContainer = styled.div`
+  margin-top: 14px;
+  margin-bottom: 5px;
+`
+
 const EditButtons = styled.div`
   display: flex;
   flex-flow: column;
-  gap: 15px;
+  gap: 12px;
 
   button {
     margin-bottom: 0;
   }
+`
+
+const CurrentMode = styled.div`
+  width: 13rem;
+  margin-bottom: 10px;
+  text-align: left;
+  font-size: 14px;
+  font-weight: bold;
+`
+
+const ModeBadge = styled.span<{ $isEditing: boolean }>`
+  display: inline-block;
+  margin-left: 6px;
+  padding: 2px 8px;
+  color: ${({ $isEditing }): string => ($isEditing ? '#d4ecff' : '#fff5cf')};
+  background-color: ${({ $isEditing }): string =>
+    $isEditing ? '#114f86' : '#8c5d04'};
+  border-radius: 999px;
 `
 
 const CurrentMove = styled.div`
@@ -71,19 +88,91 @@ const CurrentMove = styled.div`
 `
 
 const Button = styled.button`
-  width: 13rem;
-  height: 50px;
+  width: 12.5rem;
+  height: 44px;
   margin-bottom: 30px;
-  font-size: large;
+  font-size: 1.1rem;
   font-weight: bold;
   text-align: left;
   cursor: pointer;
+  border: 1px solid transparent;
   border-radius: 10px;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover:not(:disabled) {
+    transform: translateY(-1px);
+    box-shadow: 0 0 0 2px rgb(255 255 255 / 16%);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.65;
+  }
 `
 
 const SwitchModeButton = styled(Button)`
   color: white;
   background-color: rgb(31 75 140);
+  border-color: rgb(31 75 140);
+
+  &:hover:not(:disabled) {
+    background-color: rgb(38 89 163);
+    border-color: rgb(62 120 203);
+  }
+`
+
+const SecondaryButton = styled(Button)`
+  height: 40px;
+  color: #d4d8df;
+  background-color: rgb(255 255 255 / 4%);
+  border: 1px solid #697385;
+  font-size: 1rem;
+
+  &:hover:not(:disabled) {
+    background-color: rgb(255 255 255 / 10%);
+    border-color: #8d99af;
+  }
+`
+
+const DangerTextButton = styled.button`
+  width: 12.5rem;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  color: #d7abab;
+  background-color: rgb(87 30 30 / 45%);
+  border: 1px solid rgb(160 63 63 / 75%);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  text-align: left;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+
+  &:hover:not(:disabled) {
+    color: #ecc9c9;
+    background-color: rgb(109 42 42 / 55%);
+    border-color: rgb(187 91 91 / 85%);
+    transform: translateY(-1px);
+  }
+
+  &:disabled {
+    color: #7f6a6a;
+    background-color: rgb(63 44 44 / 45%);
+    border-color: rgb(107 85 85 / 70%);
+    cursor: not-allowed;
+  }
 `
 
 function getSfenFromQuery(): string | null {
@@ -217,7 +306,7 @@ export function Game(): JSX.Element {
     // 保存している盤面と同じであれば、確認ダイアログは表示しない
     if (
       isEqual(savedPieces, currentPieces) ||
-      confirm('盤面を保存して解答しますか？')
+      confirm('盤面を保存して解答を開始しますか？')
     ) {
       savePieces(currentPieces)
       setMode('solve')
@@ -228,13 +317,13 @@ export function Game(): JSX.Element {
   function handleDeleteSavedBoard(): void {
     if (!savedPieces) return
 
-    if (confirm('保存した配置を消しますか？')) {
+    if (confirm('保存データを削除しますか？')) {
       deleteSavedPieces()
     }
   }
 
   function handleClearBoard(): void {
-    if (confirm('配置をクリアしますか？')) {
+    if (confirm('盤面を初期化しますか？')) {
       clearCurrentPieces()
     }
   }
@@ -271,14 +360,6 @@ export function Game(): JSX.Element {
   return (
     <>
       <ModeContext.Provider value={mode}>
-        <ModeButtonContainer>
-          <ModeButton isActive={isEditing} onModeSwitch={handleSwitchToEdit}>
-            <FaEdit /> 編集モード
-          </ModeButton>
-          <ModeButton isActive={isSolving} onModeSwitch={handleSwitchToSolve}>
-            <FaChessKing /> 解答モード
-          </ModeButton>
-        </ModeButtonContainer>
         <DndContext
           onDragStart={dragPieceStart}
           onDragEnd={dropPiece}
@@ -301,35 +382,33 @@ export function Game(): JSX.Element {
               <RowNumbers />
             </BoardAndRowNumbersDiv>
             <ButtonsAndStandDiv>
-              {isEditing && (
-                <SfenLoader
-                  onCopyShareUrl={handleCopyShareUrl}
-                  onLoadSfen={handleLoadSfen}
-                  onSfenInputChange={setSfenInput}
-                  sfenInput={sfenInput}
-                />
-              )}
+              <CurrentMode>
+                現在モード:
+                <ModeBadge $isEditing={isEditing}>
+                  {isEditing ? '編集' : '解答'}
+                </ModeBadge>
+              </CurrentMode>
               <Buttons>
                 {isEditing && (
                   <EditButtons>
                     <SwitchModeButton onClick={handleSwitchToSolve}>
-                      <FaChessKing /> 保存して解答する
+                      <FaPlay /> 解答を開始
                     </SwitchModeButton>
-                    <Button
+                    <SecondaryButton onClick={handleClearBoard}>
+                      <FaEraser /> 盤面を初期化
+                    </SecondaryButton>
+                    <DangerTextButton
                       disabled={!savedPieces}
                       onClick={handleDeleteSavedBoard}
                     >
-                      <FaTrash /> 保存した配置を消す
-                    </Button>
-                    <Button onClick={handleClearBoard}>
-                      <FaEraser /> 配置をクリア
-                    </Button>
+                      <FaTrash /> 保存データを削除
+                    </DangerTextButton>
                   </EditButtons>
                 )}
                 {isSolving && (
                   <>
                     <SwitchModeButton onClick={handleSwitchToEdit}>
-                      <FaEdit /> 盤面を編集する
+                      <FaEdit /> 編集に戻る
                     </SwitchModeButton>
                     <CurrentMove>{currentMove} 手目</CurrentMove>
                     <StepButtonGroup
@@ -343,7 +422,19 @@ export function Game(): JSX.Element {
                   </>
                 )}
               </Buttons>
-              <PieceStand pieces={piecesInStand} currentMove={currentMove} />
+              {isEditing && (
+                <SfenLoaderContainer>
+                  <SfenLoader
+                    onCopyShareUrl={handleCopyShareUrl}
+                    onLoadSfen={handleLoadSfen}
+                    onSfenInputChange={setSfenInput}
+                    sfenInput={sfenInput}
+                  />
+                </SfenLoaderContainer>
+              )}
+              <PieceStandContainer>
+                <PieceStand pieces={piecesInStand} currentMove={currentMove} />
+              </PieceStandContainer>
             </ButtonsAndStandDiv>
           </BoardContainer>
           <PieceBox pieces={piecesInBox} currentMove={currentMove} />

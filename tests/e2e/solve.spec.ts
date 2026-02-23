@@ -17,10 +17,10 @@ test('解答モードで駒の動かせる範囲のみ駒を動かせること',
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   const square_5_6 = page.locator('#square-5-6')
   await dragAndDrop(page, piece, square_5_6)
@@ -49,10 +49,10 @@ test('解答モードで駒の動かせる範囲に自駒がある場合はそ�
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   await dragAndDrop(page, piece1, square_5_4)
 
@@ -81,10 +81,10 @@ test('解答モードで駒の動かせる範囲に敵駒がある場合はそ�
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   await dragAndDrop(page, piece1, square_5_4)
 
@@ -110,10 +110,10 @@ test('解答モードで駒が敵陣入ったとき成ることができるこ�
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   const square_5_3 = page.locator('#square-5-3')
   await dragAndDrop(page, myPawn, square_5_3)
@@ -155,10 +155,10 @@ test('解答モードで駒が敵陣から出たとき成ることができる�
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   const square_4_3 = page.locator('#square-4-3')
   await dragAndDrop(page, mySilver, square_4_3)
@@ -217,10 +217,10 @@ test('解答モード手を進めたり戻したりできること', async ({ pa
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   const square_2_3 = page.locator('#square-2-3')
   await dragAndDrop(page, pawn, square_2_3)

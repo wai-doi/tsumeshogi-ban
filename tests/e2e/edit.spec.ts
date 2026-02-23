@@ -164,7 +164,7 @@ test('編集モードでクリアボタンを押すと盤面の駒がすべて�
 
   // クリックが反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('配置をクリア').click()
+  await page.getByText('盤面を初期化').click()
 
   await expect(square_5_5.locator('#pawn-0')).not.toBeVisible()
   await expect(square_3_3.locator('#pawn-1')).not.toBeVisible()
@@ -189,10 +189,10 @@ test('編集モードで盤面を編集して解答モードに切り替える�
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   await page.reload()
 
@@ -216,17 +216,17 @@ test('編集モードで盤面が保存された状態で、保存の削除を�
 
   // クリックしても反応しない場合があるため待機
   await page.waitForTimeout(100)
-  await page.getByText('保存して解答する').click()
+  await page.getByText('解答を開始').click()
 
   // 解答モードが表示されたことを確認
-  await expect(page.getByText('盤面を編集する')).toBeVisible()
+  await expect(page.getByText('編集に戻る')).toBeVisible()
 
   await page.reload()
 
   await expect(square.locator('#pawn-0')).toBeVisible()
   await expect(stand.locator('#pawn-1')).toBeVisible()
 
-  await page.getByText('保存した配置を消す').click()
+  await page.getByText('保存データを削除').click()
 
   await page.reload()
 
